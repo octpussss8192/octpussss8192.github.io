@@ -1,0 +1,1944 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Duolingo風 英語中間特訓 | 総合英語AⅡ (Unit 8・9・10)</title>
+  <style>
+    :root {
+      --primary: #58cc02;
+      --primary-dark: #46a302;
+      --primary-light: #d7ffb8;
+      --secondary: #1cb0f6;
+      --secondary-dark: #1899d6;
+      --secondary-light: #ddf4ff;
+      --danger: #ff4b4b;
+      --danger-dark: #ea2b2b;
+      --danger-light: #ffdfe0;
+      --warning: #ff9600;
+      --warning-dark: #e08500;
+      --purple: #ce82ff;
+      --purple-dark: #a855f7;
+      --gray-bg: #f7f9fa;
+      --gray-slot: #e5e5e5;
+      --gray-border: #e5e5e5;
+      --gray-text: #777777;
+      --dark-text: #3c3c3c;
+      --radius: 16px;
+      --radius-sm: 12px;
+      --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "Hiragino Sans", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-main);
+      background-color: var(--gray-bg);
+      color: var(--dark-text);
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* 全体コンテナ (スマホ最適化) */
+    .app-container {
+      width: 100%;
+      max-width: 680px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      background: #ffffff;
+      box-shadow: 0 0 30px rgba(0,0,0,0.06);
+    }
+
+    /* ナビゲーション・ヘッダー */
+    .header {
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      border-bottom: 2px solid #f0f0f0;
+      background: #ffffff;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .icon-btn {
+      background: none;
+      border: none;
+      font-size: 22px;
+      color: #afafaf;
+      cursor: pointer;
+      line-height: 1;
+      padding: 6px;
+      border-radius: 8px;
+      transition: all 0.15s;
+    }
+    .icon-btn:hover {
+      color: var(--dark-text);
+      background: #f0f0f0;
+    }
+
+    .progress-bar-wrap {
+      flex: 1;
+      height: 16px;
+      background: #e5e5e5;
+      border-radius: 999px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--primary);
+      border-radius: 999px;
+      transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+
+    .progress-bar-fill::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 8px;
+      right: 8px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.4);
+      border-radius: 999px;
+    }
+
+    .status-badges {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .badge-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-weight: 800;
+      font-size: 15px;
+    }
+    .badge-item.hearts { color: var(--danger); }
+    .badge-item.gems { color: var(--secondary); }
+    .badge-item.streak { color: var(--warning); }
+
+    /* モード切替タブバー */
+    .nav-tabs {
+      display: flex;
+      border-bottom: 2px solid #e5e5e5;
+      background: #ffffff;
+    }
+    .nav-tab {
+      flex: 1;
+      padding: 10px 4px;
+      text-align: center;
+      font-weight: 800;
+      font-size: 14px;
+      color: #999;
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .nav-tab.active {
+      color: var(--primary-dark);
+      border-bottom-color: var(--primary);
+    }
+
+    /* クイズ設定サブバー */
+    .quiz-options-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 18px;
+      background: #fafafa;
+      border-bottom: 1px solid #eee;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--gray-text);
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .unit-selector {
+      display: flex;
+      gap: 4px;
+      background: #e9e9e9;
+      padding: 3px;
+      border-radius: 10px;
+    }
+
+    .unit-btn {
+      padding: 5px 11px;
+      border: none;
+      background: transparent;
+      font-size: 12px;
+      font-weight: 800;
+      color: #666;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .unit-btn.active {
+      background: #fff;
+      color: var(--primary-dark);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+    }
+
+    .toggle-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      color: #444;
+    }
+    .toggle-label input {
+      accent-color: var(--primary);
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+
+    /* メインコンテンツエリア */
+    .content-area {
+      flex: 1;
+      padding: 20px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      max-width: 100%;
+    }
+
+    .question-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .question-title {
+      font-size: 21px;
+      font-weight: 900;
+      color: var(--dark-text);
+      letter-spacing: -0.3px;
+    }
+
+    .badges-row {
+      display: flex;
+      gap: 6px;
+    }
+
+    .tag-badge {
+      font-size: 12px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-weight: 800;
+    }
+    .tag-badge.unit { background: #e8f5e9; color: #2e7d32; }
+    .tag-badge.format { background: #e0f2fe; color: #0369a1; }
+
+    /* キャラクターと吹き出し */
+    .mascot-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .mascot-avatar {
+      width: 80px;
+      height: 80px;
+      flex-shrink: 0;
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .mascot-avatar:hover {
+      transform: scale(1.08) rotate(-2deg);
+    }
+
+    .speech-bubble {
+      flex: 1;
+      background: #ffffff;
+      border: 2px solid var(--gray-border);
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      position: relative;
+      box-shadow: 0 4px 0 var(--gray-border);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    /* 吹き出し三角 */
+    .speech-bubble::before {
+      content: '';
+      position: absolute;
+      top: 24px;
+      left: -12px;
+      width: 0;
+      height: 0;
+      border-top: 9px solid transparent;
+      border-bottom: 9px solid transparent;
+      border-right: 12px solid var(--gray-border);
+    }
+    .speech-bubble::after {
+      content: '';
+      position: absolute;
+      top: 26px;
+      left: -9px;
+      width: 0;
+      height: 0;
+      border-top: 7px solid transparent;
+      border-bottom: 7px solid transparent;
+      border-right: 10px solid #ffffff;
+    }
+
+    .context-prompt {
+      font-size: 13px;
+      color: #888;
+      font-weight: 600;
+      background: #f8f8f8;
+      padding: 4px 8px;
+      border-radius: 6px;
+      display: inline-block;
+    }
+
+    .prompt-main-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .japanese-text {
+      font-size: 17px;
+      font-weight: 800;
+      line-height: 1.45;
+      color: #222;
+    }
+
+    .audio-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--secondary);
+      border: none;
+      color: white;
+      cursor: pointer;
+      flex-shrink: 0;
+      box-shadow: 0 3px 0 var(--secondary-dark);
+      transition: all 0.1s;
+    }
+    .audio-btn:active {
+      transform: translateY(2px);
+      box-shadow: none;
+    }
+
+    /* 解答スロットセクション（上段の配置エリア） */
+    .answer-slot-section {
+      min-height: 130px;
+      background: #ffffff;
+      border-top: 2px solid #e5e5e5;
+      border-bottom: 2px solid #e5e5e5;
+      padding: 14px 6px;
+      display: flex;
+      flex-wrap: wrap;
+      align-content: flex-start;
+      gap: 10px 8px;
+      position: relative;
+      transition: background-color 0.2s, border-color 0.2s;
+      border-radius: 8px;
+    }
+
+    .answer-slot-section.drag-over {
+      background-color: #f0fdf4;
+      border-color: var(--primary);
+    }
+
+    .slot-empty-hint {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #b8b8b8;
+      font-size: 15px;
+      font-weight: 700;
+      pointer-events: none;
+      text-align: center;
+      width: 90%;
+    }
+
+    /* 単語バンク（下段の選択肢エリア） */
+    .word-bank-section {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-content: flex-start;
+      gap: 10px 8px;
+      padding: 16px 0;
+      min-height: 130px;
+    }
+
+    /* 単語チップデザイン（Duolingo風立体ボタン） */
+    .word-chip {
+      background-color: #ffffff;
+      border: 2px solid var(--gray-border);
+      border-radius: var(--radius-sm);
+      padding: 10px 16px;
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--dark-text);
+      box-shadow: 0 3px 0 var(--gray-border);
+      cursor: pointer;
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      touch-action: manipulation;
+      transition: transform 0.08s ease, box-shadow 0.08s ease, background-color 0.15s, opacity 0.15s;
+    }
+
+    .word-chip:hover {
+      background-color: #fafafa;
+    }
+
+    .word-chip:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 var(--gray-border);
+    }
+
+    /* スロット内単語チップ（配置済み） */
+    .slot-chip {
+      background-color: #ffffff;
+      border: 2px solid var(--secondary);
+      box-shadow: 0 3px 0 var(--secondary-dark);
+      color: #0284c7;
+      animation: popIn 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes popIn {
+      0% { transform: scale(0.85); opacity: 0.5; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* バンク内のプレースホルダー（配置済み時の半透明ゴースト） */
+    .word-chip-placeholder {
+      background-color: #e5e5e5;
+      border: 2px dashed #cccccc;
+      box-shadow: none;
+      cursor: default;
+      opacity: 0.6;
+    }
+    .word-chip-placeholder .chip-text {
+      visibility: hidden;
+    }
+
+    /* ドラッグ中のスタイル */
+    .word-chip.dragging {
+      opacity: 0.4;
+      transform: scale(0.96);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+    }
+
+    /* フッターエリア（判定・解説バー） */
+    .footer {
+      border-top: 2px solid #f0f0f0;
+      padding: 16px 20px 24px 20px;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      transition: background-color 0.25s ease, border-color 0.25s ease;
+      position: sticky;
+      bottom: 0;
+      z-index: 100;
+    }
+
+    .footer.correct {
+      background: var(--primary-light);
+      border-top-color: #bbf797;
+    }
+
+    .footer.incorrect {
+      background: var(--danger-light);
+      border-top-color: #ffc2c5;
+    }
+
+    /* フィードバック解説エリア */
+    .feedback-box {
+      display: none;
+      animation: slideUp 0.25s ease-out;
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .feedback-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 20px;
+      font-weight: 900;
+      margin-bottom: 6px;
+    }
+    .footer.correct .feedback-header { color: #2e7d32; }
+    .footer.incorrect .feedback-header { color: #d32f2f; }
+
+    .feedback-solution {
+      font-weight: 800;
+      font-size: 16px;
+      color: #111;
+      padding: 8px 12px;
+      background: rgba(255,255,255,0.85);
+      border-radius: 10px;
+      margin-bottom: 6px;
+      line-height: 1.4;
+    }
+
+    .feedback-explanation {
+      font-size: 13px;
+      color: #444;
+      background: rgba(255, 255, 255, 0.65);
+      padding: 8px 12px;
+      border-radius: 10px;
+      line-height: 1.5;
+    }
+
+    /* ボタングループ */
+    .action-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .hint-btn {
+      background: #ffffff;
+      border: 2px solid #e5e5e5;
+      color: #777;
+      font-size: 15px;
+      font-weight: 800;
+      padding: 14px 18px;
+      border-radius: var(--radius);
+      box-shadow: 0 4px 0 #e5e5e5;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.1s;
+    }
+    .hint-btn:hover {
+      border-color: #ccc;
+      color: #333;
+    }
+    .hint-btn:active {
+      transform: translateY(3px);
+      box-shadow: none;
+    }
+
+    .check-btn {
+      flex: 1;
+      background: var(--primary);
+      border: none;
+      color: #ffffff;
+      font-size: 18px;
+      font-weight: 900;
+      padding: 15px 24px;
+      border-radius: var(--radius);
+      box-shadow: 0 4px 0 var(--primary-dark);
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: all 0.1s;
+    }
+
+    .check-btn:hover:not(:disabled) {
+      filter: brightness(1.05);
+    }
+    .check-btn:active:not(:disabled) {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 var(--primary-dark);
+    }
+    .check-btn:disabled {
+      background: #e5e5e5;
+      box-shadow: 0 4px 0 #d0d0d0;
+      color: #afafaf;
+      cursor: not-allowed;
+    }
+
+    .check-btn.btn-continue-correct {
+      background: var(--primary);
+      box-shadow: 0 4px 0 var(--primary-dark);
+    }
+    .check-btn.btn-continue-incorrect {
+      background: var(--danger);
+      box-shadow: 0 4px 0 var(--danger-dark);
+    }
+
+    /* レッスン完了リザルト画面 */
+    .summary-screen {
+      display: none;
+      padding: 40px 24px;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 22px;
+      min-height: 80vh;
+      justify-content: center;
+    }
+
+    .trophy-svg {
+      width: 120px;
+      height: 120px;
+      animation: floatTrophy 2s infinite ease-in-out;
+    }
+    @keyframes floatTrophy {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+
+    .summary-title {
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--dark-text);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      width: 100%;
+      max-width: 480px;
+    }
+
+    .stat-card {
+      border: 2px solid #e5e5e5;
+      border-radius: var(--radius);
+      padding: 16px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      box-shadow: 0 4px 0 #e5e5e5;
+      background: white;
+    }
+    .stat-card.green { border-color: #58cc02; box-shadow: 0 4px 0 #46a302; }
+    .stat-card.orange { border-color: #ff9600; box-shadow: 0 4px 0 #e08500; }
+    .stat-card.blue { border-color: #1cb0f6; box-shadow: 0 4px 0 #1899d6; }
+
+    .stat-val {
+      font-size: 24px;
+      font-weight: 900;
+    }
+    .stat-card.green .stat-val { color: #46a302; }
+    .stat-card.orange .stat-val { color: #e08500; }
+    .stat-card.blue .stat-val { color: #0284c7; }
+
+    .stat-lbl {
+      font-size: 11px;
+      font-weight: 800;
+      color: #888;
+      text-transform: uppercase;
+    }
+
+    .summary-btn {
+      width: 100%;
+      max-width: 380px;
+      border: none;
+      font-size: 17px;
+      font-weight: 900;
+      padding: 16px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: all 0.1s;
+    }
+    .summary-btn.primary {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 4px 0 var(--primary-dark);
+    }
+    .summary-btn.danger {
+      background: #ffffff;
+      border: 2px solid var(--danger);
+      color: var(--danger);
+      box-shadow: 0 4px 0 var(--danger);
+    }
+    .summary-btn:active {
+      transform: translateY(3px);
+      box-shadow: none !important;
+    }
+
+    /* 一覧・カンペモーダル */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 999;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+    }
+    .modal-content {
+      background: white;
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 620px;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 24px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 12px;
+    }
+    .modal-header h3 {
+      font-size: 20px;
+      font-weight: 900;
+      color: #333;
+    }
+    .sentence-card {
+      border: 1px solid #e5e5e5;
+      border-radius: 10px;
+      padding: 12px 14px;
+      background: #fafafa;
+    }
+    .sentence-card .s-num {
+      font-weight: 800;
+      color: var(--secondary-dark);
+      font-size: 13px;
+    }
+    .sentence-card .s-ja {
+      font-weight: 700;
+      margin: 4px 0;
+      font-size: 15px;
+    }
+    .sentence-card .s-en {
+      font-weight: 800;
+      color: #15803d;
+      font-size: 15px;
+      background: #f0fdf4;
+      padding: 6px 10px;
+      border-radius: 6px;
+    }
+    .sentence-card .s-dummy {
+      margin-top: 4px;
+      font-size: 12px;
+      color: #b91c1c;
+      font-weight: 700;
+    }
+
+    /* 単語帳タブのスタイル */
+    .vocab-screen {
+      display: none;
+      padding: 16px 20px;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .vocab-card {
+      background: white;
+      border: 2px solid #eee;
+      border-radius: 12px;
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 0 #eee;
+    }
+    .vocab-en {
+      font-size: 17px;
+      font-weight: 800;
+      color: #1e293b;
+    }
+    .vocab-ja {
+      font-size: 14px;
+      font-weight: 600;
+      color: #64748b;
+    }
+    .vocab-unit {
+      font-size: 11px;
+      font-weight: 700;
+      background: #e2e8f0;
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: #475569;
+    }
+
+    /* レスポンシブ微調整 */
+    @media (max-width: 480px) {
+      .header { padding: 10px 14px; gap: 10px; }
+      .content-area { padding: 14px 14px; gap: 14px; }
+      .mascot-avatar { width: 64px; height: 64px; }
+      .speech-bubble { padding: 10px 14px; }
+      .japanese-text { font-size: 15px; }
+      .word-chip { padding: 8px 12px; font-size: 15px; }
+      .check-btn { padding: 14px; font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-container">
+
+  <!-- ヘッダー -->
+  <header class="header">
+    <button class="icon-btn" id="listModalBtn" title="全15問の一覧・暗記シートを開く">📋</button>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="progressBar"></div>
+    </div>
+    <div class="status-badges">
+      <div class="badge-item streak" title="連続正解ストリーク">
+        🔥 <span id="streakCount">0</span>
+      </div>
+      <div class="badge-item gems" title="獲得スコア">
+        💎 <span id="gemCount">0</span>
+      </div>
+      <div class="badge-item hearts" title="残りライフ">
+        ❤️ <span id="heartCount">5</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- タブナビゲーション（整序クイズ / 単語帳） -->
+  <div class="nav-tabs">
+    <button class="nav-tab active" id="tabQuiz">🎯 整序・英作文 (大問6・7)</button>
+    <button class="nav-tab" id="tabVocab">📖 TOEIC重要単語 (大問2)</button>
+  </div>
+
+  <!-- クイズ設定バー -->
+  <div class="quiz-options-bar" id="quizOptionsBar">
+    <div class="unit-selector">
+      <button class="unit-btn active" data-unit="all">全15問</button>
+      <button class="unit-btn" data-unit="Unit 8">U8</button>
+      <button class="unit-btn" data-unit="Unit 9">U9</button>
+      <button class="unit-btn" data-unit="Unit 10">U10</button>
+    </div>
+    <label class="toggle-label" title="大問6完全対策：ダミーの不要語句を1語混入させます">
+      <input type="checkbox" id="dummyToggle" checked>
+      <span>🎯 不要語句あり (実戦大問6)</span>
+    </label>
+  </div>
+
+  <!-- クイズプレイ画面 -->
+  <main class="content-area" id="quizPlayArea">
+    
+    <div class="question-header-row">
+      <div class="question-title">英文を並び替えてください</div>
+      <div class="badges-row">
+        <span class="tag-badge unit" id="unitBadge">Unit 8</span>
+        <span class="tag-badge format" id="questionNumBadge">第 1 問</span>
+      </div>
+    </div>
+
+    <!-- マスコットと問題文吹き出し -->
+    <div class="mascot-row">
+      <div class="mascot-avatar" id="mascotAvatar">
+        <svg viewBox="0 0 100 100" style="width:100%; height:100%;" id="owlSvg">
+          <!-- ボディ -->
+          <ellipse cx="50" cy="55" rx="38" ry="40" fill="#58cc02" />
+          <ellipse cx="50" cy="55" rx="38" ry="40" fill="none" stroke="#46a302" stroke-width="3" />
+          <!-- お腹 -->
+          <ellipse cx="50" cy="65" rx="26" ry="24" fill="#a4e94e" />
+          <path d="M 42 60 Q 50 64 58 60" stroke="#46a302" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <path d="M 45 68 Q 50 71 55 68" stroke="#46a302" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <!-- 目（白目） -->
+          <circle cx="37" cy="40" r="14" fill="#ffffff" stroke="#e5e5e5" stroke-width="2"/>
+          <circle cx="63" cy="40" r="14" fill="#ffffff" stroke="#e5e5e5" stroke-width="2"/>
+          <!-- 瞳 -->
+          <g id="owlEyes">
+            <circle cx="39" cy="40" r="7" fill="#4b4b4b" />
+            <circle cx="41" cy="38" r="2.5" fill="#ffffff" />
+            <circle cx="61" cy="40" r="7" fill="#4b4b4b" />
+            <circle cx="63" cy="38" r="2.5" fill="#ffffff" />
+          </g>
+          <!-- くちばし -->
+          <polygon points="50,44 43,53 57,53" fill="#ff9600" />
+          <!-- 羽 -->
+          <ellipse cx="16" cy="56" rx="8" ry="16" fill="#46a302" transform="rotate(-15 16 56)"/>
+          <ellipse cx="84" cy="56" rx="8" ry="16" fill="#46a302" transform="rotate(15 84 56)"/>
+          <!-- 足 -->
+          <ellipse cx="38" cy="94" rx="7" ry="4" fill="#ff9600" />
+          <ellipse cx="62" cy="94" rx="7" ry="4" fill="#ff9600" />
+        </svg>
+      </div>
+
+      <div class="speech-bubble">
+        <div class="context-prompt" id="contextPrompt" style="display:none;"></div>
+        <div class="prompt-main-row">
+          <div class="japanese-text" id="japanesePrompt">男性の1人が道具を使っている。</div>
+          <button class="audio-btn" id="audioPromptBtn" title="英語ネイティブ音声で読み上げ">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 解答スロットエリア（タップまたはドラッグで配置） -->
+    <div>
+      <div class="answer-slot-section" id="answerSlot">
+        <span class="slot-empty-hint" id="slotEmptyHint">👇 下の単語をタップまたはドラッグして並べてください</span>
+      </div>
+    </div>
+
+    <!-- 単語バンク（選択肢一覧） -->
+    <div class="word-bank-section" id="wordBank">
+      <!-- 単語チップが動的に生成されます -->
+    </div>
+
+  </main>
+
+  <!-- TOEIC単語帳画面 -->
+  <main class="vocab-screen" id="vocabScreen">
+    <div style="font-weight:800; font-size:18px; color:#333;">Unit 8・9・10 TOEIC重要単語（全60語）</div>
+    <div id="vocabListContainer" style="display:flex; flex-direction:column; gap:8px;"></div>
+  </main>
+
+  <!-- レッスン完了リザルト画面 -->
+  <main class="summary-screen" id="summaryScreen">
+    <svg class="trophy-svg" viewBox="0 0 100 100">
+      <path d="M25 25 L25 50 C25 65 38 75 50 75 C62 75 75 65 75 50 L75 25 Z" fill="#ffc800" stroke="#e08500" stroke-width="3"/>
+      <path d="M25 35 C15 35 10 45 15 55 C18 61 25 60 25 60" fill="none" stroke="#e08500" stroke-width="4" stroke-linecap="round"/>
+      <path d="M75 35 C85 35 90 45 85 55 C82 61 75 60 75 60" fill="none" stroke="#e08500" stroke-width="4" stroke-linecap="round"/>
+      <rect x="42" y="75" width="16" height="15" fill="#e08500"/>
+      <rect x="30" y="88" width="40" height="8" rx="4" fill="#d07400"/>
+      <polygon points="50,35 53,42 61,43 55,48 57,56 50,52 43,56 45,48 39,43 47,42" fill="#ffffff" opacity="0.85"/>
+    </svg>
+    <h2 class="summary-title">特訓完了！すばらしい！🎉</h2>
+    <p style="color:#666; font-weight:700; font-size:15px;">大問6（整序 18点）＆ 大問7（英作文 6点）完全対策達成！</p>
+
+    <div class="stats-grid">
+      <div class="stat-card green">
+        <span class="stat-val" id="summaryAccuracy">100%</span>
+        <span class="stat-lbl">正解率</span>
+      </div>
+      <div class="stat-card orange">
+        <span class="stat-val" id="summaryStreak">15</span>
+        <span class="stat-lbl">最大コンボ</span>
+      </div>
+      <div class="stat-card blue">
+        <span class="stat-val" id="summaryGems">+150</span>
+        <span class="stat-lbl">獲得ジェム</span>
+      </div>
+    </div>
+
+    <button class="summary-btn danger" id="reviewMistakesBtn" style="display:none;">⚠️ 間違えた問題だけを再特訓</button>
+    <button class="summary-btn primary" id="restartAllBtn">もう一度全問チャレンジ</button>
+  </main>
+
+  <!-- フッター操作バー（判定・次へ） -->
+  <footer class="footer" id="footerBar">
+    <div class="feedback-box" id="feedbackBox">
+      <div class="feedback-header" id="feedbackTitle">
+        <span id="feedbackIcon">🎉</span>
+        <span id="feedbackHeadline">正解！ すばらしい！</span>
+      </div>
+      <div class="feedback-solution" id="feedbackCorrectAnswer"></div>
+      <div class="feedback-explanation" id="feedbackExplanation"></div>
+    </div>
+
+    <div class="action-row">
+      <button class="hint-btn" id="hintBtn" title="ヒントを見る">💡 ヒント</button>
+      <button class="check-btn" id="checkBtn" disabled>チェック</button>
+    </div>
+  </footer>
+
+</div>
+
+<!-- 全15問一覧・暗記シート モーダル -->
+<div class="modal-overlay" id="listModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>📝 全15問 完全暗記シート</h3>
+      <button class="icon-btn" id="closeListModalBtn">✕</button>
+    </div>
+    <div id="modalListContainer" style="display:flex; flex-direction:column; gap:12px;"></div>
+  </div>
+</div>
+
+<script>
+/**
+ * 総合英語AⅡ 後期中間試験 完全対応データ
+ * 大問6 整序（不要語句1語つき）18点 ＋ 大問7 英作文 6点
+ */
+const QUESTION_DATABASE = [
+  // --- Unit 8 ---
+  {
+    id: 1,
+    unit: "Unit 8",
+    ja: "男性の1人が道具を使っている。",
+    en: "One of the men is using a tool.",
+    words: ["One", "of", "the", "men", "is", "using", "a", "tool"],
+    dummy: "are",
+    context: null,
+    punctuation: ".",
+    hint: "主語は One of the men です。動詞は単数扱い？複数扱い？",
+    explanation: "【主語と動詞の一致】One of the + 複数名詞 (men) が主語なので、動詞は単数の is になります（are は引っかけ）。現在進行形 is using a tool."
+  },
+  {
+    id: 2,
+    unit: "Unit 8",
+    ja: "今日のワークショップの間、視聴覚機器が作動しませんでした。",
+    en: "The audiovisual equipment didn't work during today's workshop.",
+    words: ["The", "audiovisual", "equipment", "didn't", "work", "during", "today's", "workshop"],
+    dummy: "while",
+    context: null,
+    punctuation: ".",
+    hint: "equipmentは数えられない名詞。期間を表すのは during か while か？",
+    explanation: "【名詞と前置詞】equipment は不可算名詞（複数形にしない）。特定期間を表す前置詞は during + 名詞（while は接続詞なので直後に名詞は置けません）。work は「機能する、作動する」。"
+  },
+  {
+    id: 3,
+    unit: "Unit 8",
+    ja: "参加者全員に対して軽い飲食物が十分にないのではと心配しています。",
+    en: "I'm worried we may not have enough refreshments for all the attendees.",
+    words: ["I'm", "worried", "we", "may", "not", "have", "enough", "refreshments", "for", "all", "the", "attendees"],
+    dummy: "to",
+    context: null,
+    punctuation: ".",
+    hint: "I'm worried (that) we may not have... enough の位置に注意！",
+    explanation: "【語順と名詞】enough + 名詞（enough refreshments：十分な軽食）。attendee は参加者・出席者。不要語句は to です。"
+  },
+  {
+    id: 4,
+    unit: "Unit 8",
+    ja: "私たちは近々行われる見本市のためにブースを予約すべきです。",
+    en: "We should book a booth for the upcoming trade show.",
+    words: ["We", "should", "book", "a", "booth", "for", "the", "upcoming", "trade", "show"],
+    dummy: "reserve",
+    context: null,
+    punctuation: ".",
+    hint: "予約する動詞は book か reserve か？プリントでは book a booth を使用。",
+    explanation: "【動詞 book と upcoming】book は動詞で「予約する（= reserve）」。設問では book a booth の組み合わせのため reserve は不要語句。upcoming は「今度の、近々行われる」。"
+  },
+  {
+    id: 5,
+    unit: "Unit 8",
+    ja: "その授賞式は6月1日に宴会場で行われます。",
+    en: "The award ceremony will be held at the banquet hall on June 1.",
+    words: ["The", "award", "ceremony", "will", "be", "held", "at", "the", "banquet", "hall", "on", "June 1"],
+    dummy: "in",
+    context: null,
+    punctuation: ".",
+    hint: "特定の日付（June 1）の前につく前置詞は in か on か？",
+    explanation: "【前置詞 on vs in】日付（June 1）の前は必ず前置詞 on を使います（月単体なら in June ですが特定の日があるので on。in は超頻出トラップ）。will be held は「開催される」。"
+  },
+
+  // --- Unit 9 ---
+  {
+    id: 6,
+    unit: "Unit 9",
+    ja: "彼は今日、ロンドンから帰って来るのですよね。―― はい、彼はもうすぐここに着くはずです。",
+    en: "He's coming back from London today, isn't he?",
+    words: ["He's", "coming", "back", "from", "London", "today,", "isn't", "he"],
+    dummy: "doesn't",
+    context: "― Yes, he should be here pretty soon.",
+    punctuation: "?",
+    hint: "付加疑問文です。He's (He is) を否定の疑問形にすると？",
+    explanation: "【付加疑問文】前半が be動詞の現在進行形 He's なので、末尾は isn't he? になります。一般動詞と勘違いさせる doesn't が不要語句トラップ。"
+  },
+  {
+    id: 7,
+    unit: "Unit 9",
+    ja: "今日は気持ちの良い日ですよね。一緒にピクニックに行きませんか。",
+    en: "Why don't we go on a picnic?",
+    words: ["Why", "don't", "we", "go", "on", "a", "picnic"],
+    dummy: "to",
+    context: "It's a beautiful day, isn't it? ― ",
+    punctuation: "?",
+    hint: "勧誘表現「〜しませんか？」は Why don't we...? ピクニックに行くの前置詞は？",
+    explanation: "【勧誘とイディオム】Why don't we + 動詞原形?（〜しませんか）。「ピクニックに行く」は go on a picnic（前置詞 on）。go to a picnic は不可なので to が不要語句。"
+  },
+  {
+    id: 8,
+    unit: "Unit 9",
+    ja: "ご都合がつき次第、折り返しお電話ください。",
+    en: "Please call me back at your earliest convenience.",
+    words: ["Please", "call", "me", "back", "at", "your", "earliest", "convenience"],
+    dummy: "convenient",
+    context: null,
+    punctuation: ".",
+    hint: "折り返し電話する (call <人> back)。最上級 earliest の後ろは名詞！",
+    explanation: "【句動詞と定型表現】call <人> back（代名詞 me は真ん中）。at your earliest convenience は「ご都合がつき次第（最上級+名詞）」。convenient は形容詞なので不可。"
+  },
+  {
+    id: 9,
+    unit: "Unit 9",
+    ja: "いくつかの新しいプログラムが、月曜日にインストールされる予定です。",
+    en: "Some new programs are scheduled to be installed on Monday.",
+    words: ["Some", "new", "programs", "are", "scheduled", "to", "be", "installed", "on", "Monday"],
+    dummy: "install",
+    context: null,
+    punctuation: ".",
+    hint: "プログラムは「インストールされる側」。受動態の不定詞にします。",
+    explanation: "【受動態の不定詞】be scheduled to be installed（受動態）。プログラムはインストールされる対象なので能動態の install は不要語句トラップ。"
+  },
+  {
+    id: 10,
+    unit: "Unit 9",
+    ja: "家具を組み立てるには、以下の手順に従ってください。",
+    en: "Please follow the steps below to assemble the furniture.",
+    words: ["Please", "follow", "the", "steps", "below", "to", "assemble", "the", "furniture"],
+    dummy: "furnitures",
+    context: null,
+    punctuation: ".",
+    hint: "furniture は数えられる？数えられない？",
+    explanation: "【不可算名詞】furniture（家具）は不可算名詞なので複数形 -s は付けられません！ furnitures は英語に存在しない罠単語です。"
+  },
+
+  // --- Unit 10 ---
+  {
+    id: 11,
+    unit: "Unit 10",
+    ja: "あなたはその機器をオンラインで注文しなかったのですか。―― いいえ、しましたよ。",
+    en: "Didn't you order the device online?",
+    words: ["Didn't", "you", "order", "the", "device", "online"],
+    dummy: "ordered",
+    context: "― Yes, I did.",
+    punctuation: "?",
+    hint: "否定疑問文 Didn't you... の直後にくる動詞の形は？",
+    explanation: "【否定疑問文】助動詞 Didn't you の後は動詞の原形 order です。過去形の ordered はトラップ。英語は実際に注文した場合は Yes, I did. と答えます。"
+  },
+  {
+    id: 12,
+    unit: "Unit 10",
+    ja: "当店には同じスタイルで違う色もございます。",
+    en: "We have the same style in other colors.",
+    words: ["We", "have", "the", "same", "style", "in", "other", "colors"],
+    dummy: "with",
+    context: null,
+    punctuation: ".",
+    hint: "色や寸法を表す前置詞は with か in か？",
+    explanation: "【前置詞 in】色やサイズを表す前置詞は in を使います（in other colors, in red など）。道具や付帯を表す with は使いません。"
+  },
+  {
+    id: 13,
+    unit: "Unit 10",
+    ja: "次の出荷品は3日後に届きます。",
+    en: "The next shipment will arrive in three days.",
+    words: ["The", "next", "shipment", "will", "arrive", "in", "three", "days"],
+    dummy: "after",
+    context: null,
+    punctuation: ".",
+    hint: "今から〜後を表す前置詞は after ではなく…？",
+    explanation: "【未来の経過 in vs after】現在から「〜後」は前置詞 in を使います（in three days）。after は過去の基準点からの経過に使うため未来には使えません（超頻出トラップ！）。"
+  },
+  {
+    id: 14,
+    unit: "Unit 10",
+    ja: "私は携帯用充電器を買いに出かけました。しかし、それは在庫切れでした。",
+    en: "However, they were out of stock.",
+    words: ["However,", "they", "were", "out", "of", "stock"],
+    dummy: "the",
+    context: "I went out to buy a portable charger. ",
+    punctuation: ".",
+    hint: "「在庫切れで」は out of stock。冠詞 the は必要？",
+    explanation: "【イディオム out of stock】「在庫切れで」は out of stock。無冠詞なので the は不要語句です（out of the stock は間違い）。"
+  },
+  {
+    id: 15,
+    unit: "Unit 10",
+    ja: "その家電は非常に便利です。その上、使い方も簡単です。",
+    en: "Additionally, it is easy to use.",
+    words: ["Additionally,", "it", "is", "easy", "to", "use"],
+    dummy: "addition",
+    context: "The appliance is very useful. ",
+    punctuation: ".",
+    hint: "文頭でカンマを伴って「その上」と修飾するのは副詞 Additionally か名詞 addition か？",
+    explanation: "【接続副詞と不定詞】文頭で「その上、さらに」と副詞修飾するのは Additionally, です（名詞 addition は不可）。easy to use（能動態で使いやすい）。"
+  }
+];
+
+// --- TOEIC単語リスト (Unit 8, 9, 10 全60語) ---
+const VOCAB_DATABASE = [
+  { en: "admission", ja: "入場料", unit: "Unit 8" },
+  { en: "apply for ~", ja: "～に申し込む", unit: "Unit 8" },
+  { en: "award ceremony", ja: "授賞式", unit: "Unit 8" },
+  { en: "committee", ja: "委員会", unit: "Unit 8" },
+  { en: "complete", ja: "～を完了させる、～に記入する", unit: "Unit 8" },
+  { en: "confirm", ja: "～を確認する", unit: "Unit 8" },
+  { en: "effort", ja: "取り組み、努力", unit: "Unit 8" },
+  { en: "encourage 〈人〉 to do", ja: "人に～するように促す", unit: "Unit 8" },
+  { en: "enroll", ja: "登録する", unit: "Unit 8" },
+  { en: "hold", ja: "～を開催する", unit: "Unit 8" },
+  { en: "in person", ja: "直に、対面で", unit: "Unit 8" },
+  { en: "local", ja: "地元の", unit: "Unit 8" },
+  { en: "luncheon", ja: "昼食会", unit: "Unit 8" },
+  { en: "optional", ja: "任意の", unit: "Unit 8" },
+  { en: "organize", ja: "～を準備する、まとめる", unit: "Unit 8" },
+  { en: "participant", ja: "参加者", unit: "Unit 8" },
+  { en: "proceeds", ja: "収益金", unit: "Unit 8" },
+  { en: "registration", ja: "登録", unit: "Unit 8" },
+  { en: "sponsor", ja: "出資者、スポンサー", unit: "Unit 8" },
+  { en: "venue", ja: "会場", unit: "Unit 8" },
+  { en: "appliance", ja: "家電製品", unit: "Unit 9" },
+  { en: "appointment", ja: "予約、約束", unit: "Unit 9" },
+  { en: "attendant", ja: "係員", unit: "Unit 9" },
+  { en: "budget", ja: "予算", unit: "Unit 9" },
+  { en: "checkup", ja: "健康診断、検診", unit: "Unit 9" },
+  { en: "construction", ja: "建設", unit: "Unit 9" },
+  { en: "deliver", ja: "～を配達する、（演説）を行う", unit: "Unit 9" },
+  { en: "due", ja: "期日で、期限がきて", unit: "Unit 9" },
+  { en: "facility", ja: "施設", unit: "Unit 9" },
+  { en: "follow", ja: "～に従う", unit: "Unit 9" },
+  { en: "inspection", ja: "検査", unit: "Unit 9" },
+  { en: "real estate agency", ja: "不動産業者", unit: "Unit 9" },
+  { en: "receptionist", ja: "受付係", unit: "Unit 9" },
+  { en: "refund", ja: "返金", unit: "Unit 9" },
+  { en: "reimbursement form", ja: "払い戻し申請書", unit: "Unit 9" },
+  { en: "return", ja: "～を返却する", unit: "Unit 9" },
+  { en: "settle one's bill", ja: "勘定を支払う", unit: "Unit 9" },
+  { en: "sign", ja: "標識、看板", unit: "Unit 9" },
+  { en: "transportation", ja: "交通手段", unit: "Unit 9" },
+  { en: "within walking distance", ja: "徒歩圏内で", unit: "Unit 9" },
+  { en: "a great deal", ja: "お買い得", unit: "Unit 10" },
+  { en: "additional", ja: "追加の", unit: "Unit 10" },
+  { en: "be guaranteed", ja: "保証されている", unit: "Unit 10" },
+  { en: "cashier", ja: "レジ係", unit: "Unit 10" },
+  { en: "contractor", ja: "請負業者", unit: "Unit 10" },
+  { en: "expire", ja: "期限が切れる", unit: "Unit 10" },
+  { en: "gift certificate", ja: "商品券", unit: "Unit 10" },
+  { en: "in charge of ~", ja: "～を担当して", unit: "Unit 10" },
+  { en: "inventory", ja: "在庫", unit: "Unit 10" },
+  { en: "order form", ja: "注文用紙", unit: "Unit 10" },
+  { en: "out of stock", ja: "在庫切れで", unit: "Unit 10" },
+  { en: "portable", ja: "携帯用の", unit: "Unit 10" },
+  { en: "receipt", ja: "領収書、レシート", unit: "Unit 10" },
+  { en: "recommend", ja: "～を推薦する、勧める", unit: "Unit 10" },
+  { en: "reduce", ja: "～を減らす", unit: "Unit 10" },
+  { en: "repair", ja: "修理、～を修理する", unit: "Unit 10" },
+  { en: "replace", ja: "～を取り替える", unit: "Unit 10" },
+  { en: "shipment", ja: "出荷品、発送", unit: "Unit 10" },
+  { en: "valid", ja: "有効な", unit: "Unit 10" },
+  { en: "warranty", ja: "保証書、保証", unit: "Unit 10" }
+];
+
+// --- Web Audio API シンセサイザー ---
+class SoundManager {
+  constructor() {
+    this.ctx = null;
+  }
+  init() {
+    if (!this.ctx) {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      this.ctx = new AudioCtx();
+    }
+    if (this.ctx.state === 'suspended') {
+      this.ctx.resume();
+    }
+  }
+  playTap() {
+    this.init();
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(540, this.ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(800, this.ctx.currentTime + 0.05);
+    gain.gain.setValueAtTime(0.12, this.ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.05);
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
+    osc.start();
+    osc.stop(this.ctx.currentTime + 0.05);
+  }
+  playReturn() {
+    this.init();
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(700, this.ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(450, this.ctx.currentTime + 0.06);
+    gain.gain.setValueAtTime(0.12, this.ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.06);
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
+    osc.start();
+    osc.stop(this.ctx.currentTime + 0.06);
+  }
+  playCorrect() {
+    this.init();
+    const notes = [523.25, 659.25, 783.99, 1046.50];
+    notes.forEach((freq, i) => {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, this.ctx.currentTime + i * 0.075);
+      gain.gain.setValueAtTime(0.2, this.ctx.currentTime + i * 0.075);
+      gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + i * 0.075 + 0.35);
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start(this.ctx.currentTime + i * 0.075);
+      osc.stop(this.ctx.currentTime + i * 0.075 + 0.35);
+    });
+  }
+  playIncorrect() {
+    this.init();
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(260, this.ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(140, this.ctx.currentTime + 0.35);
+    gain.gain.setValueAtTime(0.25, this.ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.35);
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
+    osc.start();
+    osc.stop(this.ctx.currentTime + 0.35);
+  }
+  playVictory() {
+    this.init();
+    const chord = [523.25, 659.25, 783.99, 1046.50, 1318.51];
+    chord.forEach((freq) => {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, this.ctx.currentTime + 0.1);
+      gain.gain.setValueAtTime(0.25 / chord.length, this.ctx.currentTime + 0.1);
+      gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 1.2);
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start(this.ctx.currentTime + 0.1);
+      osc.stop(this.ctx.currentTime + 1.2);
+    });
+  }
+}
+
+const sounds = new SoundManager();
+
+// --- 音声読み上げ ---
+function speakText(text) {
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+    const cleanText = text.replace(/―/g, '').trim();
+    const uttr = new SpeechSynthesisUtterance(cleanText);
+    uttr.lang = 'en-US';
+    uttr.rate = 0.92;
+    window.speechSynthesis.speak(uttr);
+  }
+}
+
+// --- メインアプリクラス ---
+class DuolingoQuizApp {
+  constructor() {
+    this.currentUnitFilter = "all";
+    this.useDummy = true;
+    this.questions = [];
+    this.currentIndex = 0;
+    this.hearts = 5;
+    this.gems = 0;
+    this.streak = 0;
+    this.maxStreak = 0;
+    this.correctCount = 0;
+    this.mistakeQuestions = [];
+
+    this.currentQ = null;
+    this.bankChips = [];
+    this.slotChipIds = [];
+    this.isChecked = false;
+
+    // DOMキャッシュ
+    this.progressBar = document.getElementById("progressBar");
+    this.heartCountEl = document.getElementById("heartCount");
+    this.gemCountEl = document.getElementById("gemCount");
+    this.streakCountEl = document.getElementById("streakCount");
+    this.unitBadge = document.getElementById("unitBadge");
+    this.questionNumBadge = document.getElementById("questionNumBadge");
+    this.contextPrompt = document.getElementById("contextPrompt");
+    this.japanesePrompt = document.getElementById("japanesePrompt");
+    this.audioPromptBtn = document.getElementById("audioPromptBtn");
+    this.answerSlot = document.getElementById("answerSlot");
+    this.slotEmptyHint = document.getElementById("slotEmptyHint");
+    this.wordBank = document.getElementById("wordBank");
+    this.footerBar = document.getElementById("footerBar");
+    this.feedbackBox = document.getElementById("feedbackBox");
+    this.feedbackTitle = document.getElementById("feedbackTitle");
+    this.feedbackIcon = document.getElementById("feedbackIcon");
+    this.feedbackHeadline = document.getElementById("feedbackHeadline");
+    this.feedbackCorrectAnswer = document.getElementById("feedbackCorrectAnswer");
+    this.feedbackExplanation = document.getElementById("feedbackExplanation");
+    this.checkBtn = document.getElementById("checkBtn");
+    this.hintBtn = document.getElementById("hintBtn");
+    this.dummyToggle = document.getElementById("dummyToggle");
+    this.quizPlayArea = document.getElementById("quizPlayArea");
+    this.summaryScreen = document.getElementById("summaryScreen");
+    this.summaryAccuracy = document.getElementById("summaryAccuracy");
+    this.summaryStreak = document.getElementById("summaryStreak");
+    this.summaryGems = document.getElementById("summaryGems");
+    this.restartAllBtn = document.getElementById("restartAllBtn");
+    this.reviewMistakesBtn = document.getElementById("reviewMistakesBtn");
+    this.owlEyes = document.getElementById("owlEyes");
+
+    // モーダル・タブ
+    this.listModal = document.getElementById("listModal");
+    this.listModalBtn = document.getElementById("listModalBtn");
+    this.closeListModalBtn = document.getElementById("closeListModalBtn");
+    this.modalListContainer = document.getElementById("modalListContainer");
+    this.tabQuiz = document.getElementById("tabQuiz");
+    this.tabVocab = document.getElementById("tabVocab");
+    this.vocabScreen = document.getElementById("vocabScreen");
+    this.quizOptionsBar = document.getElementById("quizOptionsBar");
+    this.vocabListContainer = document.getElementById("vocabListContainer");
+
+    this.bindEvents();
+    this.renderModalList();
+    this.renderVocabList();
+    this.initQuiz();
+  }
+
+  bindEvents() {
+    // タブ切替
+    this.tabQuiz.addEventListener("click", () => {
+      this.tabQuiz.classList.add("active");
+      this.tabVocab.classList.remove("active");
+      this.quizPlayArea.style.display = "flex";
+      this.quizOptionsBar.style.display = "flex";
+      this.footerBar.style.display = "flex";
+      this.vocabScreen.style.display = "none";
+    });
+
+    this.tabVocab.addEventListener("click", () => {
+      this.tabVocab.classList.add("active");
+      this.tabQuiz.classList.remove("active");
+      this.quizPlayArea.style.display = "none";
+      this.quizOptionsBar.style.display = "none";
+      this.footerBar.style.display = "none";
+      this.summaryScreen.style.display = "none";
+      this.vocabScreen.style.display = "flex";
+    });
+
+    // モーダル
+    this.listModalBtn.addEventListener("click", () => {
+      this.listModal.style.display = "flex";
+    });
+    this.closeListModalBtn.addEventListener("click", () => {
+      this.listModal.style.display = "none";
+    });
+    this.listModal.addEventListener("click", (e) => {
+      if (e.target === this.listModal) this.listModal.style.display = "none";
+    });
+
+    // Unit選択
+    document.querySelectorAll(".unit-btn").forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        document.querySelectorAll(".unit-btn").forEach(b => b.classList.remove("active"));
+        e.target.classList.add("active");
+        this.currentUnitFilter = e.target.dataset.unit;
+        this.initQuiz();
+      });
+    });
+
+    // 不要語句トグル
+    this.dummyToggle.addEventListener("change", (e) => {
+      this.useDummy = e.target.checked;
+      this.loadQuestion(this.currentIndex);
+    });
+
+    // 音声再生
+    this.audioPromptBtn.addEventListener("click", () => {
+      if (this.currentQ) speakText(this.currentQ.en);
+    });
+
+    // ヒントボタン
+    this.hintBtn.addEventListener("click", () => {
+      if (!this.currentQ) return;
+      alert(`💡 ヒント:\n${this.currentQ.hint}`);
+    });
+
+    // チェック・次へボタン
+    this.checkBtn.addEventListener("click", () => {
+      if (!this.isChecked) {
+        this.checkAnswer();
+      } else {
+        this.nextQuestion();
+      }
+    });
+
+    // リザルト再開ボタン
+    this.restartAllBtn.addEventListener("click", () => this.initQuiz());
+    this.reviewMistakesBtn.addEventListener("click", () => this.initMistakeReview());
+
+    // ドラッグ＆ドロップ
+    this.initDragAndDrop();
+
+    // キーボードショートカット
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        if (!this.checkBtn.disabled) this.checkBtn.click();
+      } else if (e.key === "Backspace") {
+        if (!this.isChecked && this.slotChipIds.length > 0) {
+          const lastId = this.slotChipIds[this.slotChipIds.length - 1];
+          this.removeChipFromSlot(lastId);
+        }
+      }
+    });
+  }
+
+  initQuiz() {
+    let pool = QUESTION_DATABASE.slice();
+    if (this.currentUnitFilter !== "all") {
+      pool = pool.filter(q => q.unit === this.currentUnitFilter);
+    }
+    this.questions = this.shuffleArray(pool);
+    this.currentIndex = 0;
+    this.hearts = 5;
+    this.gems = 0;
+    this.streak = 0;
+    this.maxStreak = 0;
+    this.correctCount = 0;
+    this.mistakeQuestions = [];
+
+    this.updateHeaderStats();
+    this.quizPlayArea.style.display = "flex";
+    this.summaryScreen.style.display = "none";
+    this.footerBar.style.display = "flex";
+    this.loadQuestion(0);
+  }
+
+  initMistakeReview() {
+    this.questions = this.shuffleArray(this.mistakeQuestions.slice());
+    this.currentIndex = 0;
+    this.mistakeQuestions = [];
+    this.quizPlayArea.style.display = "flex";
+    this.summaryScreen.style.display = "none";
+    this.footerBar.style.display = "flex";
+    this.loadQuestion(0);
+  }
+
+  loadQuestion(index) {
+    if (index >= this.questions.length) {
+      this.showSummary();
+      return;
+    }
+
+    this.currentIndex = index;
+    this.currentQ = this.questions[index];
+    this.isChecked = false;
+    this.slotChipIds = [];
+
+    // プログレスバー
+    const progressPercent = (this.currentIndex / this.questions.length) * 100;
+    this.progressBar.style.width = `${progressPercent}%`;
+
+    // バッジ
+    this.unitBadge.textContent = this.currentQ.unit;
+    this.questionNumBadge.textContent = `問 ${this.currentIndex + 1} / ${this.questions.length}`;
+
+    // 文脈セリフ
+    if (this.currentQ.context) {
+      this.contextPrompt.style.display = "inline-block";
+      this.contextPrompt.textContent = this.currentQ.context;
+    } else {
+      this.contextPrompt.style.display = "none";
+    }
+    this.japanesePrompt.textContent = this.currentQ.ja;
+
+    // フクロウ表情
+    this.setMascotMood("normal");
+
+    // 単語チップリスト構築（正解単語 ＋ 不要語句ダミー）
+    let chipData = this.currentQ.words.map((w, idx) => ({
+      id: `w_${idx}`,
+      word: w,
+      isDummy: false,
+      used: false
+    }));
+
+    if (this.useDummy && this.currentQ.dummy) {
+      chipData.push({
+        id: `dummy_${index}`,
+        word: this.currentQ.dummy,
+        isDummy: true,
+        used: false
+      });
+    }
+
+    this.bankChips = this.shuffleArray(chipData);
+
+    this.resetFooter();
+    this.renderBank();
+    this.renderSlot();
+    this.updateCheckButtonState();
+  }
+
+  renderBank() {
+    this.wordBank.innerHTML = "";
+    this.bankChips.forEach(chip => {
+      const chipEl = document.createElement("div");
+      chipEl.className = "word-chip";
+      chipEl.dataset.id = chip.id;
+      chipEl.draggable = !chip.used && !this.isChecked;
+
+      if (chip.used) {
+        chipEl.classList.add("word-chip-placeholder");
+      }
+
+      chipEl.innerHTML = `<span class="chip-text">${chip.word}</span>`;
+
+      chipEl.addEventListener("click", () => {
+        if (!chip.used && !this.isChecked) {
+          sounds.playTap();
+          this.addChipToSlot(chip.id);
+        }
+      });
+
+      this.wordBank.appendChild(chipEl);
+    });
+  }
+
+  renderSlot() {
+    this.answerSlot.innerHTML = "";
+
+    if (this.slotChipIds.length === 0) {
+      this.answerSlot.appendChild(this.slotEmptyHint);
+      this.slotEmptyHint.style.display = "block";
+    } else {
+      this.slotEmptyHint.style.display = "none";
+
+      this.slotChipIds.forEach((chipId, index) => {
+        const chip = this.bankChips.find(c => c.id === chipId);
+        if (!chip) return;
+
+        const chipEl = document.createElement("div");
+        chipEl.className = "word-chip slot-chip";
+        chipEl.dataset.id = chip.id;
+        chipEl.dataset.slotIndex = index;
+        chipEl.draggable = !this.isChecked;
+        chipEl.innerHTML = `<span class="chip-text">${chip.word}</span>`;
+
+        chipEl.addEventListener("click", () => {
+          if (!this.isChecked) {
+            sounds.playReturn();
+            this.removeChipFromSlot(chip.id);
+          }
+        });
+
+        this.answerSlot.appendChild(chipEl);
+      });
+    }
+  }
+
+  addChipToSlot(chipId, insertIndex = null) {
+    const chip = this.bankChips.find(c => c.id === chipId);
+    if (!chip || chip.used) return;
+
+    chip.used = true;
+    if (insertIndex !== null && insertIndex >= 0 && insertIndex <= this.slotChipIds.length) {
+      this.slotChipIds.splice(insertIndex, 0, chipId);
+    } else {
+      this.slotChipIds.push(chipId);
+    }
+
+    this.renderBank();
+    this.renderSlot();
+    this.updateCheckButtonState();
+  }
+
+  removeChipFromSlot(chipId) {
+    const chip = this.bankChips.find(c => c.id === chipId);
+    if (!chip) return;
+
+    chip.used = false;
+    this.slotChipIds = this.slotChipIds.filter(id => id !== chipId);
+
+    this.renderBank();
+    this.renderSlot();
+    this.updateCheckButtonState();
+  }
+
+  updateCheckButtonState() {
+    if (this.isChecked) return;
+    this.checkBtn.disabled = this.slotChipIds.length === 0;
+  }
+
+  checkAnswer() {
+    if (this.isChecked || this.slotChipIds.length === 0) return;
+    this.isChecked = true;
+
+    const userWords = this.slotChipIds.map(id => {
+      const chip = this.bankChips.find(c => c.id === id);
+      return chip ? chip.word : "";
+    });
+
+    const userSentence = userWords.join(" ");
+    
+    // 正解照合：句読点・記号の差異を吸収して判定
+    const clean = (s) => s.toLowerCase().replace(/[\.,\?!―]/g, '').replace(/\s+/g, ' ').trim();
+    const isCorrect = (clean(userSentence) === clean(this.currentQ.en)) ||
+                      (JSON.stringify(userWords) === JSON.stringify(this.currentQ.words));
+
+    if (isCorrect) {
+      this.handleCorrect();
+    } else {
+      this.handleIncorrect();
+    }
+  }
+
+  handleCorrect() {
+    sounds.playCorrect();
+    speakText(this.currentQ.en);
+
+    this.streak++;
+    if (this.streak > this.maxStreak) this.maxStreak = this.streak;
+    this.gems += 10;
+    this.correctCount++;
+    this.updateHeaderStats();
+
+    this.setMascotMood("happy");
+
+    this.footerBar.className = "footer correct";
+    this.feedbackBox.style.display = "block";
+    this.feedbackIcon.textContent = "🎉";
+    this.feedbackHeadline.textContent = "すばらしい！正解です！";
+    this.feedbackCorrectAnswer.textContent = `正解: ${this.currentQ.en}`;
+    this.feedbackExplanation.textContent = `💡 ポイント: ${this.currentQ.explanation}`;
+
+    this.checkBtn.textContent = "次へ進む";
+    this.checkBtn.className = "check-btn btn-continue-correct";
+    this.checkBtn.disabled = false;
+    this.hintBtn.style.display = "none";
+  }
+
+  handleIncorrect() {
+    sounds.playIncorrect();
+
+    this.streak = 0;
+    this.hearts = Math.max(0, this.hearts - 1);
+    this.updateHeaderStats();
+
+    if (!this.mistakeQuestions.some(q => q.id === this.currentQ.id)) {
+      this.mistakeQuestions.push(this.currentQ);
+    }
+
+    this.setMascotMood("sad");
+
+    this.footerBar.className = "footer incorrect";
+    this.feedbackBox.style.display = "block";
+    this.feedbackIcon.textContent = "💔";
+    this.feedbackHeadline.textContent = "おしい！正解はこちら";
+    this.feedbackCorrectAnswer.textContent = `模範解答: ${this.currentQ.en}`;
+    
+    let extraExplanation = `💡 試験ポイント: ${this.currentQ.explanation}`;
+    if (this.currentQ.dummy) {
+      extraExplanation += ` (※本番の不要語句トラップ: "${this.currentQ.dummy}")`;
+    }
+    this.feedbackExplanation.textContent = extraExplanation;
+
+    this.checkBtn.textContent = "理解した（次へ）";
+    this.checkBtn.className = "check-btn btn-continue-incorrect";
+    this.checkBtn.disabled = false;
+    this.hintBtn.style.display = "none";
+
+    speakText(this.currentQ.en);
+  }
+
+  nextQuestion() {
+    if (this.currentIndex + 1 < this.questions.length) {
+      this.loadQuestion(this.currentIndex + 1);
+    } else {
+      this.showSummary();
+    }
+  }
+
+  showSummary() {
+    sounds.playVictory();
+    this.progressBar.style.width = "100%";
+    this.quizPlayArea.style.display = "none";
+    this.footerBar.style.display = "none";
+    this.summaryScreen.style.display = "flex";
+
+    const accuracy = Math.round((this.correctCount / this.questions.length) * 100) || 0;
+    this.summaryAccuracy.textContent = `${accuracy}%`;
+    this.summaryStreak.textContent = `${this.maxStreak}`;
+    this.summaryGems.textContent = `+${this.gems}`;
+
+    if (this.mistakeQuestions.length > 0) {
+      this.reviewMistakesBtn.style.display = "block";
+      this.reviewMistakesBtn.textContent = `⚠️ 間違えた ${this.mistakeQuestions.length} 問だけを再特訓`;
+    } else {
+      this.reviewMistakesBtn.style.display = "none";
+    }
+  }
+
+  resetFooter() {
+    this.footerBar.className = "footer";
+    this.feedbackBox.style.display = "none";
+    this.checkBtn.textContent = "チェック";
+    this.checkBtn.className = "check-btn";
+    this.checkBtn.disabled = true;
+    this.hintBtn.style.display = "flex";
+  }
+
+  updateHeaderStats() {
+    this.heartCountEl.textContent = this.hearts;
+    this.gemCountEl.textContent = this.gems;
+    this.streakCountEl.textContent = this.streak;
+  }
+
+  setMascotMood(mood) {
+    if (mood === "happy") {
+      this.owlEyes.innerHTML = `
+        <path d="M 32 40 Q 39 33 46 40" stroke="#4b4b4b" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+        <path d="M 54 40 Q 61 33 68 40" stroke="#4b4b4b" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+      `;
+    } else if (mood === "sad") {
+      this.owlEyes.innerHTML = `
+        <ellipse cx="39" cy="42" rx="6" ry="7" fill="#4b4b4b" />
+        <ellipse cx="61" cy="42" rx="6" ry="7" fill="#4b4b4b" />
+        <path d="M 44 48 Q 48 51 52 48" stroke="#1cb0f6" stroke-width="2.5" fill="none" />
+      `;
+    } else {
+      this.owlEyes.innerHTML = `
+        <circle cx="39" cy="40" r="7" fill="#4b4b4b" />
+        <circle cx="41" cy="38" r="2.5" fill="#ffffff" />
+        <circle cx="61" cy="40" r="7" fill="#4b4b4b" />
+        <circle cx="63" cy="38" r="2.5" fill="#ffffff" />
+      `;
+    }
+  }
+
+  shuffleArray(arr) {
+    const newArr = arr.slice();
+    for (let i = newArr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+    }
+    return newArr;
+  }
+
+  // ドラッグ＆ドロップ
+  initDragAndDrop() {
+    let draggedChipId = null;
+
+    document.addEventListener("dragstart", (e) => {
+      const chip = e.target.closest(".word-chip");
+      if (!chip || this.isChecked) return;
+      draggedChipId = chip.dataset.id;
+      chip.classList.add("dragging");
+      e.dataTransfer.setData("text/plain", draggedChipId);
+      e.dataTransfer.effectAllowed = "move";
+    });
+
+    document.addEventListener("dragend", (e) => {
+      const chip = e.target.closest(".word-chip");
+      if (chip) chip.classList.remove("dragging");
+      this.answerSlot.classList.remove("drag-over");
+    });
+
+    this.answerSlot.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = "move";
+      this.answerSlot.classList.add("drag-over");
+    });
+
+    this.answerSlot.addEventListener("dragleave", () => {
+      this.answerSlot.classList.remove("drag-over");
+    });
+
+    this.answerSlot.addEventListener("drop", (e) => {
+      e.preventDefault();
+      this.answerSlot.classList.remove("drag-over");
+      if (!draggedChipId || this.isChecked) return;
+
+      const targetChip = e.target.closest(".slot-chip");
+      let insertIndex = this.slotChipIds.length;
+
+      if (targetChip) {
+        insertIndex = parseInt(targetChip.dataset.slotIndex, 10);
+      }
+
+      const existingSlotIndex = this.slotChipIds.indexOf(draggedChipId);
+      if (existingSlotIndex !== -1) {
+        this.slotChipIds.splice(existingSlotIndex, 1);
+        if (existingSlotIndex < insertIndex) insertIndex--;
+        this.slotChipIds.splice(insertIndex, 0, draggedChipId);
+        sounds.playTap();
+        this.renderSlot();
+      } else {
+        sounds.playTap();
+        this.addChipToSlot(draggedChipId, insertIndex);
+      }
+      draggedChipId = null;
+    });
+
+    this.wordBank.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = "move";
+    });
+
+    this.wordBank.addEventListener("drop", (e) => {
+      e.preventDefault();
+      if (!draggedChipId || this.isChecked) return;
+      if (this.slotChipIds.includes(draggedChipId)) {
+        sounds.playReturn();
+        this.removeChipFromSlot(draggedChipId);
+      }
+      draggedChipId = null;
+    });
+  }
+
+  // モーダル一覧レンダリング
+  renderModalList() {
+    this.modalListContainer.innerHTML = "";
+    QUESTION_DATABASE.forEach(q => {
+      const card = document.createElement("div");
+      card.className = "sentence-card";
+      card.innerHTML = `
+        <div class="s-num">${q.unit} 第${q.id}問</div>
+        <div class="s-ja">${q.ja}</div>
+        <div class="s-en">${q.en}</div>
+        <div class="s-dummy">⚠️ 不要語句トラップ: <strong>${q.dummy}</strong></div>
+      `;
+      this.modalListContainer.appendChild(card);
+    });
+  }
+
+  // 単語帳レンダリング
+  renderVocabList() {
+    this.vocabListContainer.innerHTML = "";
+    VOCAB_DATABASE.forEach(item => {
+      const card = document.createElement("div");
+      card.className = "vocab-card";
+      card.innerHTML = `
+        <div>
+          <div class="vocab-en">${item.en}</div>
+          <div class="vocab-ja">${item.ja}</div>
+        </div>
+        <span class="vocab-unit">${item.unit}</span>
+      `;
+      card.addEventListener("click", () => speakText(item.en));
+      this.vocabListContainer.appendChild(card);
+    });
+  }
+}
+
+// 起動
+window.addEventListener("DOMContentLoaded", () => {
+  new DuolingoQuizApp();
+});
+</script>
+
+</body>
+</html>

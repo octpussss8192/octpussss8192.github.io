@@ -1,0 +1,1794 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>高専4年 中間試験 暗記カード</title>
+  <!-- KaTeX（数式レンダリング用） -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --bg-card: #1e293b;
+      --bg-card-back: #17253b;
+      --bg-sub: #334155;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #334155;
+      --primary: #38bdf8;
+      --primary-hover: #0ea5e9;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --red-sheet: #dc2626;
+      --shadow: 0 12px 30px -8px rgba(0, 0, 0, 0.5);
+    }
+
+    body.light {
+      --bg: #f1f5f9;
+      --bg-card: #ffffff;
+      --bg-card-back: #f8fafc;
+      --bg-sub: #e2e8f0;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #cbd5e1;
+      --primary: #0284c7;
+      --primary-hover: #0369a1;
+      --shadow: 0 12px 30px -8px rgba(15, 23, 42, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Yu Gothic UI", "Meiryo", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      transition: background 0.2s, color 0.2s;
+      overflow-x: hidden;
+    }
+
+    .app-shell {
+      max-width: 760px;
+      margin: 0 auto;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      padding: 10px 12px 16px;
+    }
+
+    /* ヘッダー */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .brand h1 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      transition: transform 0.1s ease, background 0.15s ease, opacity 0.15s ease;
+    }
+
+    button:active {
+      transform: scale(0.97);
+    }
+
+    .icon-btn {
+      background: var(--bg-card);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 6px 10px;
+      font-size: 0.82rem;
+    }
+
+    /* 教科タブ（横スクロール対応） */
+    .subject-tabs {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      margin-bottom: 8px;
+      scrollbar-width: none;
+    }
+    .subject-tabs::-webkit-scrollbar { display: none; }
+
+    .subject-tab {
+      flex-shrink: 0;
+      padding: 6px 12px;
+      background: var(--bg-card);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: 0.82rem;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .subject-tab.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+
+    .subject-tab.disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .badge {
+      font-size: 0.7rem;
+      padding: 1px 6px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    /* スリム進捗バー */
+    .progress-wrap {
+      margin-bottom: 10px;
+    }
+
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    .progress-meta strong { color: var(--text); }
+
+    .progress-track {
+      width: 100%;
+      height: 6px;
+      background: var(--bg-sub);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--success));
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    /* コントロールバー */
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .mode-switch {
+      display: inline-flex;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 2px;
+    }
+
+    .mode-btn {
+      padding: 5px 10px;
+      background: transparent;
+      color: var(--text-muted);
+      border-radius: 8px;
+      font-size: 0.8rem;
+    }
+
+    .mode-btn.active {
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    .filter-group {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      flex: 1;
+      justify-content: flex-end;
+      min-width: 0;
+    }
+
+    select {
+      font-family: inherit;
+      background: var(--bg-card);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 5px 8px;
+      font-size: 0.8rem;
+      max-width: 175px;
+      text-overflow: ellipsis;
+    }
+
+    .toggle-pill {
+      padding: 5px 9px;
+      background: var(--bg-card);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.78rem;
+      white-space: nowrap;
+    }
+
+    .toggle-pill.active {
+      background: rgba(245, 158, 11, 0.2);
+      color: var(--warning);
+      border-color: var(--warning);
+    }
+
+    /* =====================================================================
+       有名フラッシュカード風（タップで裏返す）エリア
+       ===================================================================== */
+    #cardModeView {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .flashcard-scene {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      perspective: 1200px;
+      min-height: 320px;
+    }
+
+    .flashcard {
+      flex: 1;
+      position: relative;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      padding: 18px 18px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+      user-select: none;
+      transition: transform 0.22s ease, background 0.2s ease, border-color 0.2s ease;
+      touch-action: pan-y;
+    }
+
+    .flashcard.is-back {
+      background: var(--bg-card-back);
+      border-color: var(--primary);
+    }
+
+    .flashcard.flip-anim {
+      animation: cardFlipPop 0.24s ease;
+    }
+
+    @keyframes cardFlipPop {
+      0% { transform: scale(0.98) rotateX(8deg); opacity: 0.85; }
+      100% { transform: scale(1) rotateX(0deg); opacity: 1; }
+    }
+
+    /* スワイプ時のインジケーター */
+    .swipe-badge {
+      position: absolute;
+      top: 18px;
+      padding: 6px 14px;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 0.95rem;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 10;
+      border: 2px solid;
+    }
+    .swipe-badge.mastered {
+      left: 18px;
+      color: var(--success);
+      border-color: var(--success);
+      background: rgba(34, 197, 94, 0.15);
+    }
+    .swipe-badge.review {
+      right: 18px;
+      color: var(--warning);
+      border-color: var(--warning);
+      background: rgba(245, 158, 11, 0.15);
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      font-size: 0.78rem;
+    }
+
+    .cat-tag {
+      background: rgba(56, 189, 248, 0.16);
+      color: var(--primary);
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 60%;
+    }
+
+    .card-right-meta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+
+    .status-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .dot-mastered { background: var(--success); }
+    .dot-review { background: var(--warning); }
+    .dot-unseen { background: var(--text-muted); opacity: 0.5; }
+
+    .card-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 8px 2px;
+      overflow-y: auto;
+    }
+
+    .side-label {
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      color: var(--text-muted);
+    }
+    .flashcard.is-back .side-label {
+      color: var(--primary);
+    }
+
+    .card-text {
+      font-size: 1.08rem;
+      font-weight: 600;
+      line-height: 1.7;
+      word-break: break-word;
+    }
+
+    .flashcard.is-back .card-text {
+      font-size: 1.02rem;
+    }
+
+    .card-note {
+      margin-top: 14px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: var(--bg-sub);
+      font-size: 0.86rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    .tap-hint {
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 14px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--border);
+    }
+
+    /* 数式のスマホはみ出し防止 */
+    .katex-display {
+      overflow-x: auto;
+      overflow-y: hidden;
+      max-width: 100%;
+      padding: 6px 0;
+      margin: 8px 0 !important;
+    }
+    .katex {
+      font-size: 1.02em;
+    }
+
+    /* 下部アクションバー（親指操作最適化） */
+    .bottom-dock {
+      display: grid;
+      grid-template-columns: 1fr auto auto 1fr;
+      gap: 8px;
+      align-items: center;
+      padding-top: 4px;
+    }
+
+    .dock-btn-review {
+      background: rgba(245, 158, 11, 0.16);
+      color: var(--warning);
+      border: 1px solid rgba(245, 158, 11, 0.45);
+      padding: 14px 10px;
+      font-size: 0.95rem;
+      border-radius: 14px;
+    }
+    .dock-btn-review:hover { background: rgba(245, 158, 11, 0.28); }
+
+    .dock-btn-mastered {
+      background: rgba(34, 197, 94, 0.18);
+      color: var(--success);
+      border: 1px solid rgba(34, 197, 94, 0.45);
+      padding: 14px 10px;
+      font-size: 0.95rem;
+      border-radius: 14px;
+    }
+    .dock-btn-mastered:hover { background: rgba(34, 197, 94, 0.3); }
+
+    .dock-nav {
+      background: var(--bg-card);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 14px 14px;
+      border-radius: 14px;
+      font-size: 0.95rem;
+    }
+
+    .shortcut-hint {
+      text-align: center;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      display: none;
+    }
+    @media (min-width: 640px) {
+      .shortcut-hint { display: block; }
+      .flashcard { padding: 26px 28px; }
+      .card-text { font-size: 1.15rem; }
+    }
+
+    /* =====================================================================
+       赤シート一覧モード
+       ===================================================================== */
+    .list-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      gap: 8px;
+    }
+
+    .red-sheet-btn {
+      background: var(--red-sheet);
+      color: #ffffff;
+      padding: 7px 13px;
+      font-size: 0.82rem;
+    }
+
+    .red-sheet-btn.off {
+      background: var(--bg-card);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .list-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding-bottom: 24px;
+    }
+
+    .list-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+    }
+
+    .list-item-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 0.76rem;
+    }
+
+    .list-q {
+      font-weight: 600;
+      font-size: 0.96rem;
+      margin-bottom: 10px;
+    }
+
+    .list-a {
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: var(--bg-sub);
+      cursor: pointer;
+      position: relative;
+      font-size: 0.92rem;
+    }
+
+    .list-a.masked {
+      background: var(--red-sheet);
+      min-height: 44px;
+    }
+
+    .list-a.masked .mask-target {
+      visibility: hidden;
+    }
+
+    .list-a.masked::after {
+      content: "タップで解答を表示";
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: 0.04em;
+    }
+
+    .list-item-foot {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .mini-btn {
+      padding: 5px 11px;
+      font-size: 0.78rem;
+      border-radius: 8px;
+      background: var(--bg-sub);
+      color: var(--text);
+    }
+    .mini-btn.active-mastered { background: var(--success); color: #fff; }
+    .mini-btn.active-review { background: var(--warning); color: #fff; }
+
+    .empty-state {
+      text-align: center;
+      padding: 48px 20px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      color: var(--text-muted);
+    }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header>
+      <div class="brand">
+        <span style="font-size: 1.25rem;">🧠</span>
+        <h1>中間試験 暗記カード</h1>
+      </div>
+      <div class="header-actions">
+        <button class="icon-btn" id="themeToggle">☀️</button>
+        <button class="icon-btn" id="resetProgressBtn">🔄 リセット</button>
+      </div>
+    </header>
+
+    <!-- 教科タブ -->
+    <div class="subject-tabs" id="subjectTabs"></div>
+
+    <!-- 進捗バー -->
+    <div class="progress-wrap">
+      <div class="progress-meta">
+        <span>習得: <strong id="progressText">0 / 0 (0%)</strong></span>
+        <span id="reviewCountText">要復習: 0問</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+    </div>
+
+    <!-- コントロール -->
+    <div class="controls">
+      <div class="mode-switch">
+        <button class="mode-btn active" data-mode="card">🃏 カード</button>
+        <button class="mode-btn" data-mode="list">📕 赤シート</button>
+      </div>
+
+      <div class="filter-group">
+        <select id="categoryFilter"></select>
+        <button class="toggle-pill" id="reviewOnlyBtn">🔁 未習得</button>
+        <button class="toggle-pill" id="shuffleBtn">🔀</button>
+      </div>
+    </div>
+
+    <!-- カードモード（タップで裏返す） -->
+    <div id="cardModeView">
+      <div class="flashcard-scene">
+        <div class="flashcard" id="flashcard">
+          <div class="swipe-badge mastered" id="badgeMastered">覚えた！</div>
+          <div class="swipe-badge review" id="badgeReview">もう一回</div>
+
+          <div class="card-top">
+            <span class="cat-tag" id="cardCategory">-</span>
+            <div class="card-right-meta">
+              <span class="status-dot" id="cardStatusDot"></span>
+              <span id="cardCounter">0 / 0</span>
+            </div>
+          </div>
+
+          <div class="card-body">
+            <div class="side-label" id="cardSideLabel">QUESTION</div>
+            <div class="card-text" id="cardMainText"></div>
+            <div class="card-note hidden" id="cardNote"></div>
+          </div>
+
+          <div class="tap-hint" id="tapHint">👆 タップで解答を表示</div>
+        </div>
+      </div>
+
+      <div class="bottom-dock">
+        <button class="dock-btn-review" id="markReviewBtn">🔁 もう一回</button>
+        <button class="dock-nav" id="prevCardBtn">◀</button>
+        <button class="dock-nav" id="nextCardBtn">▶</button>
+        <button class="dock-btn-mastered" id="markMasteredBtn">✅ 覚えた</button>
+      </div>
+      <div class="shortcut-hint">操作: カードクリック/Spaceで裏返し ／ 左右スワイプ・[1]覚えた・[2]もう一回 ／ [←][→]移動</div>
+    </div>
+
+    <!-- 赤シート一覧モード -->
+    <div id="listModeView" class="hidden">
+      <div class="list-toolbar">
+        <span style="font-size: 0.82rem; color: var(--text-muted);" id="listCountInfo"></span>
+        <button class="red-sheet-btn" id="redSheetToggle">📕 赤シート: ON</button>
+      </div>
+      <div class="list-grid" id="listGrid"></div>
+    </div>
+
+    <!-- 空状態 -->
+    <div id="emptyState" class="empty-state hidden">
+      <p style="font-size: 1.05rem; margin-bottom: 6px;">🎉 該当する問題がありません！</p>
+      <p style="font-size: 0.85rem;">「🔁 未習得」フィルタを外すか、リセットして再周回できます。</p>
+    </div>
+  </div>
+
+  <script>
+    // =========================================================================
+    // 教科・問題データ定義
+    // =========================================================================
+    const SUBJECTS = [
+      { id: "keisoku", name: "13_計測", ready: true },
+      { id: "gazo", name: "06_画像処理", ready: true },
+      { id: "denshi", name: "02_電子回路", ready: true },
+      { id: "pawaele", name: "01_パワエレ", ready: true }
+    ];
+
+    const QUESTIONS = {
+      keisoku: [
+        {
+          id: "k_01",
+          category: "第1章：測定法・分類",
+          q: "【課題1 / 2025過去問1】\n「偏位法（変位法）」とはどのような測定法か。具体例も2つ挙げよ。",
+          a: "測定量を表示器に零からの変位（振れ）で示し、その大きさから測定する方法。\n【具体例】電圧計（メータ）、ダイヤルゲージ、バネばかり、体重計",
+          note: "長所：測定が速く簡単で、時間変化する量も連続的に測れる。\n短所：表示器やバネなどの特性・精度に依存し、高精度化が難しい。"
+        },
+        {
+          id: "k_02",
+          category: "第1章：測定法・分類",
+          q: "【課題1 / 2025過去問3】\n「零位法」とはどのような測定法か。具体例も2つ挙げよ。",
+          a: "測定する量と基準量との差が零になるように調節し、その基準量の値をもとに測定量を求める方法。\n【具体例】ホイートストンブリッジ、天秤、電位差計",
+          note: "長所：測定器から電流を取らない等の理由により、極めて高精度に測定できる。\n短所：平衡調整に時間がかかり、変化する量の測定が難しい。"
+        },
+        {
+          id: "k_03",
+          category: "第1章：測定法・分類",
+          q: "【課題1】\n「置換法」とはどのような測定法か。",
+          a: "測定量と既知の基準量とを同じ振れ（指示値）になるように置き換えて全量比較する測定法。",
+          note: "具体例：水中置換法による固体試験片の密度測定、天秤による精密な質量測定。"
+        },
+        {
+          id: "k_04",
+          category: "第1章：測定法・分類",
+          q: "【課題1】\n「補償法」とはどのような測定法か。",
+          a: "偏位法と零位法を組み合わせた方法で、測定する量からそれにほぼ等しい既知の基準量を差し引き、小さくなった差分量を測定する方法。",
+          note: "特徴：比較的高い精度が得られ、ダイナミックレンジ（測定範囲）が広く取れる。"
+        },
+        {
+          id: "k_05",
+          category: "第1章：測定法・分類",
+          q: "「直接測定」と「間接測定」の違いと具体例を答えよ。",
+          a: "・直接測定：同じ種類の基準量と直接比較する方法（例：電圧計での電圧測定）\n・間接測定：関係のある別の量を測定し、計算等で間接的に求める方法（例：電圧と電流から抵抗を求める）",
+          note: "計測＝基準量の何倍かを数値で表すこと。測定＝検出→数量化→表示・記録→利用の一連の方法。"
+        },
+        {
+          id: "k_06",
+          category: "第1章：単位と標準",
+          q: "「絶対測定」とは何か。また、電気系の基礎標準（電流・電圧・容量）に用いられる原理・装置をそれぞれ答えよ。",
+          a: "・絶対測定：単位の定義に従って忠実に行う測定方法（基礎標準を決定する）。\n・電流標準：レイリー電流天秤（力学標準に基づく）\n・電圧標準：交流ジョセフソン効果（$V = \\frac{h}{2e}f$、原子時計で校正）\n・容量標準：クロスキャパシタ（物理的な長さ $L$ で静電容量が決まる）",
+          note: "標準器は基礎標準をもとに使いやすくしたもので、計測器の校正に使用する。"
+        },
+        {
+          id: "k_07",
+          category: "第1章：単位と標準",
+          q: "電気標準器において：\n① 標準抵抗器に使われる合金材料は何か（理由も）。\n② 標準電池に使われる材料は何か。\n③ 交流の電圧・電流標準に使われる最も高精度な交直比較器は何か。",
+          a: "① マンガニン線（Cu + Mn + Ni）：抵抗温度係数が小さく、対銅熱起電力が小さいため。\n② カドミウム（非常に安定した電圧）。\n③ 熱電形交流比較器。",
+          note: "マンガニン線の温度係数（課題2）：$\\alpha = 0.02 \\times 10^{-3}\\text{ [1/K]}$ 程度と非常に小さい。"
+        },
+        {
+          id: "k_08",
+          category: "第1章：誤差・統計",
+          q: "【課題2 / 2025過去問5】\n測定誤差 $E$、誤差百分率 $\\varepsilon$、標準偏差 $\\sigma$ の定義式を書け（測定値 $M$、真値 $T$、測定回数 $n$）。",
+          a: "・測定誤差：$E = M - T$\n・誤差百分率：$\\varepsilon = \\frac{M - T}{T} \\times 100\\text{ [\\%]}$\n・標準偏差：$\\sigma = \\sqrt{\\frac{1}{n}\\sum_{i=1}^{n}(x_i - \\bar{x})^2}$",
+          note: "正規分布の割合：$\\bar{x} \\pm 1\\sigma$ に $68.3\\%$、$\\pm 2\\sigma$ に $95.5\\%$、$\\pm 3\\sigma$ に $99.7\\%$ が入る。"
+        },
+        {
+          id: "k_09",
+          category: "第1章：誤差・統計",
+          q: "測定誤差の3つの分類（過失誤差・系統誤差・偶然誤差）と「器差」の意味を説明せよ。",
+          a: "・過失誤差：目盛の読み違いなど、測定者の不注意によるもの。\n・系統誤差：特定の原因（測定器の挿入、温度依存性など）によって起こる誤差。\n・偶然誤差：原因不明で取り除けない誤差（正規分布に従いばらつく）。\n・器差：測定器自体が持つ誤差。",
+          note: "繰り返し測定の平均値をとることで偶然誤差の影響を小さくできる。"
+        },
+        {
+          id: "k_10",
+          category: "第1章：誤差・統計",
+          q: "次の用語の違いを説明せよ：\n① 正確さ　② 精密さ（再現性）　③ 精度　④ 感度　⑤ 分解能",
+          a: "① 正確さ：測定した平均値と真値との差の大小。\n② 精密さ：繰り返し測定したときのばらつき（偶然誤差の大小）。\n③ 精度：正確さと精密さの両者を含む。\n④ 感度：測定可能な最小量。\n⑤ 分解能：検出可能な最小の出力変化を与える入力の大きさ。",
+          note: "再現性＝一定値入力における繰り返し測定の指示値のばらつきを % 表示したもの（精密さと同じ意味）。"
+        },
+        {
+          id: "k_11",
+          category: "第1章：誤差・統計",
+          q: "【課題2 / 2025過去問6】\n$0\\,^\\circ\\text{C}$ の抵抗値 $R_0$、温度係数 $\\alpha$ の抵抗線が $t\\,^\\circ\\text{C}$ になったときの抵抗値 $R_t$ の式を書け。",
+          a: "$$R_t = R_0 (1 + \\alpha t)$$",
+          note: "過去問6例：$R_0 = 20\\,\\Omega,\\; \\alpha = 5.5\\times 10^{-3},\\; t = 2000\\,^\\circ\\text{C} \\Rightarrow R_{2000} = 20(1 + 5.5\\times 10^{-3}\\times 2000) = 240\\,\\Omega$"
+        },
+        {
+          id: "k_12",
+          category: "第2章：指示電気計器",
+          q: "【課題3 / 2025過去問7, 8】\n「可動コイル形計器」の測定可能な回路、動作原理（法則）、および特徴を2つ以上挙げよ。",
+          a: "・測定回路：直流のみ（DC）\n・動作原理：永久磁石の磁界とコイル電流の相互作用（フレミングの左手の法則）\n・特徴：① 他の計器と比べて高感度である　② 直流専用の電圧計・電流計として最も広く用いられる　③ 平等目盛（指針角度が電流に比例）",
+          note: "2025過去問8注意：「ファラデーの法則」ではなく「フレミングの左手の法則」！"
+        },
+        {
+          id: "k_13",
+          category: "第2章：指示電気計器",
+          q: "【2025過去問14】\n可動コイル形計器の感度係数 $K$ を文字式で導出せよ。\n（磁束密度 $B$、コイル幅 $w$、高さ $h$、巻数 $N$、電流 $I$、制動トルク定数 $k$、回転角 $\\theta$）",
+          a: "駆動トルク：$T_d = 2 \\times (B I h N) \\times \\frac{w}{2} = B w h I N$\n制動トルク：$T_c = k \\theta$\n平衡状態（$T_d = T_c$）より：\n$$k\\theta = B w h I N \\Rightarrow \\theta = \\frac{B w h N}{k} I$$\nよって感度係数 $K$ は：\n$$K = \\frac{\\theta}{I} = \\frac{B w h N}{k}$$",
+          note: "過去問14の導出問題！ $T_d = T_c$ から $\\theta / I$ の形に整理するのがポイント。"
+        },
+        {
+          id: "k_14",
+          category: "第2章：指示電気計器",
+          q: "【課題3 / 2025過去問10】\n「可動鉄片形計器」が測定できるのは直流・交流のどちらか。また、原理・目盛の特徴・欠点を答えよ。",
+          a: "・測定回路：交流と直流の両方（周波数 $500\\text{ Hz}$ 未満）\n・原理：固定コイルの磁界内で鉄片に生じる吸引・反発作用\n・目盛：$\\theta = K I^2$（実効値の2乗目盛）\n・欠点：感度が悪い（低い）",
+          note: "過去問10は「③ 交流と直流の両方」「欠点：感度が悪い」で満点！"
+        },
+        {
+          id: "k_15",
+          category: "第2章：指示電気計器",
+          q: "【課題3(5) / 課題4(1) / 2025過去問9】\n電流力計形計器を電力計として使うとき、「小電流時」と「大電流時」の接続法の違いと理由を答えよ。",
+          a: "・小電流時：固定コイル（電流コイル $E$）を電源側、可動コイル（電圧コイル $M$）を負荷側に接続する。\n  → 理由：$E$ コイルの電圧降下を考慮する必要がないため。\n・大電流時：電圧コイル（$M$）を電源側（手前）、電流コイル（$E$）を負荷側に接続する。\n  → 理由：$M$ コイルに流れる電流が $E$ コイルに流れて測定誤差になるのを防ぐため。",
+          note: "固定コイル（$F/E$）は負荷と直列、可動コイル（$M$＋倍率器抵抗 $r$）は負荷と並列に接続する。"
+        },
+        {
+          id: "k_16",
+          category: "第2章：指示電気計器",
+          q: "電流力計形計器の回転角度 $\\theta$ の式、および電力計として用いたときの指示式を書け。",
+          a: "・一般：$\\theta = K I_1 I_2 \\sin\\theta$\n・電力計：$\\theta = K V I \\cos\\phi \\sin\\theta = K P_a \\sin\\theta$（$P_a = VI\\cos\\phi$ は有効電力）",
+          note: "交・直流両用（$10^3\\text{ Hz}$ 未満）。可動コイル形の永久磁石の代わりに固定コイルを用いる。"
+        },
+        {
+          id: "k_17",
+          category: "第2章：指示電気計器",
+          q: "【課題4(2)】\n「整流形計器」の動作原理、表示される値の特徴、および使用できる周波数の上限を答えよ。",
+          a: "・原理：交流電流をダイオード整流ブリッジで整流し、可動コイル形計器で平均電流を測定する。\n・表示：正弦波の測定を前提としているため、平均値を実効値に換算して表示する。\n・周波数上限：約 $1\\text{ MHz}$（$10 \\sim 10^6\\text{ Hz}$）",
+          note: "測定回路は交流専用。正弦波以外（ひずみ波）では実効値に誤差が生じる。"
+        },
+        {
+          id: "k_18",
+          category: "第2章：指示電気計器",
+          q: "【課題5(1)(2)】\n「熱電形計器」の動作原理、特徴、および交流電流計・交流電圧計それぞれの使用周波数限度を答えよ。",
+          a: "・原理：真空中の抵抗線に電流を流したときの発熱量 $Q = RI^2$ に比例して生じる熱電対の起電力を、可動コイル形電圧計で測定する。\n・特徴：交・直流両用。波形の影響を受けずに実効値が測定可能（ただし応答性は良くない）。\n・周波数限度：\n  - 交流電流計：約 $10\\text{ MHz}$\n  - 交流電圧計：約 $100\\text{ kHz}$（抵抗値が大きくなると浮遊容量等の影響で高周波特性が悪化するため）",
+          note: "抵抗値が大きいほど低い周波数からインピーダンスが変化する。"
+        },
+        {
+          id: "k_19",
+          category: "第2章：指示電気計器",
+          q: "【課題5(3)】\n「静電形計器」の動作原理と、どのような対象の測定に適しているか答えよ。",
+          a: "・原理：コンデンサの2枚の電極間に働く静電力を利用（駆動トルク $T_d = \\frac{1}{2} V^2 \\frac{dC}{dx}$）。\n・適する対象：高電圧の測定（交・直流両用の電圧計のみ。周波数 $10^5\\text{ Hz}$ 未満）。",
+          note: "実効値指示形電圧計。誘導形計器は「交流のみ（$10\\sim 500\\text{ Hz}$）、回転磁界と誘起うず電流の相互作用」。"
+        },
+        {
+          id: "k_20",
+          category: "第2章：指示電気計器",
+          q: "指示電気計器の精度等級（0.2級〜2.0級）の用途と、可動コイルの温度変化による器差への対策方法を2つ答えよ。",
+          a: "・等級：0.2級（校正用基準器）、0.5級（一般精密測定）、1.0級（携帯用）、1.5級・2.0級（工業用・配電盤用）。\n・温度補償対策（可動コイルは正の温度係数を持つ）：\n  ① 可動コイル $r$ に比べて十分大きい抵抗 $R_h$（$r \\ll R_h$）を直列に入れる。\n  ② 負の温度係数を持つサーミスタを入れて正の温度係数を相殺する。",
+          note: "マンガニンなどの低温度係数抵抗 $R_h$ を直列に大きく入れると全体の温度係数が小さくなる。"
+        },
+        {
+          id: "k_21",
+          category: "第2章：分流器・倍率器・CT/PT",
+          q: "【2025過去問11】\n直流電流計の測定範囲を広げる「分流器」の接続法と、倍率 $M$・分流器抵抗 $R_s$ の式を書け（内部抵抗 $r_a$）。",
+          a: "・接続：電流計に並列にシャント抵抗 $R_s$ を接続する。\n・倍率：$M = \\frac{I}{I_0} = \\frac{r_a + R_s}{R_s}$\n・分流器抵抗：$R_s = \\frac{r_a}{M - 1}$",
+          note: "過去問11：$r_a=5\\,\\Omega,\\; I_0=5\\text{ mA},\\; I=1000\\text{ mA} \\Rightarrow M=200,\\; R_s = \\frac{5}{199} \\approx 0.02513\\,\\Omega$、合成抵抗 $\\approx 0.025\\,\\Omega$。"
+        },
+        {
+          id: "k_22",
+          category: "第2章：分流器・倍率器・CT/PT",
+          q: "直流電圧計の測定範囲を広げる「倍率器」の接続法と、倍率 $M'$・倍率器抵抗 $R_M$ の式を書け（内部抵抗 $r_v$）。",
+          a: "・接続：電圧計に直列に倍率器抵抗 $R_M$ を接続する。\n・倍率：$M' = \\frac{V}{V_0} = \\frac{R_M + r_v}{r_v}$\n・倍率器抵抗：$R_M = (M' - 1) r_v$",
+          note: "電流計は内部抵抗が小さいことが望ましく、電圧計は内部抵抗が大きいことが望ましい。"
+        },
+        {
+          id: "k_23",
+          category: "第2章：分流器・倍率器・CT/PT",
+          q: "「電位差計」の測定原理（零位法）と未知電圧 $E_x$ の式、および電位差計による電流・抵抗の測定法を説明せよ。",
+          a: "・未知電圧：$E_x = \\frac{r_2}{r_1} E_s = \\frac{l_2}{l_1} E_s$（$E_s$ は標準電池の電圧。検流計 $G$ が $0$ になるように調整し、電流を流さず高精度に測定）。\n・電流測定：標準抵抗 $R_s$ に電流を流し電圧 $V_x$ に変換して測定。\n・抵抗測定：直列の $R_s$ と $R_x$ の電圧比から $R_x = \\frac{V_x}{V_s} R_s$。",
+          note: "交流電位差計は位相も一致させる必要があり、標準電池に相当する基準電圧がないため直流より精度が出ない。"
+        },
+        {
+          id: "k_24",
+          category: "第2章：分流器・倍率器・CT/PT",
+          q: "【課題6(1)(2) / 2025過去問12, 13】\n計器用変流器（CT）の変流比 $K_c$ と、計器用変圧器（PT）の変圧比 $K_p$ の式を、1次・2次の電流・電圧・巻数（$n_1, n_2$）で表せ。",
+          a: "・変流器（CT）：$K_c = \\frac{i_1}{i_2} = \\frac{n_2}{n_1}$（$n_1 i_1 = n_2 i_2$ より）\n・変圧器（PT）：$K_p = \\frac{v_1}{v_2} = \\frac{n_1}{n_2}$",
+          note: "CTは電流の比と巻数比が逆（$n_2/n_1$）になる点に注意！\nメリット：1次側と2次側を絶縁でき安全／通常の計器で大電流・高電圧が測れる。"
+        },
+        {
+          id: "k_25",
+          category: "第2章：分流器・倍率器・CT/PT",
+          q: "【第2章スライド22】\nCT（巻数比 $1/20$）に内部抵抗 $0.01\\,\\Omega$ の電流計、PT（巻数比 $100$）に内部抵抗 $500\\,\\Omega$ の電圧計を接続したとき、それぞれの内部抵抗を1次側に換算した値はいくらか。",
+          a: "・電流計の1次換算抵抗：$0.01 \\times \\left(\\frac{1}{20}\\right)^2 = 0.25 \\times 10^{-4}\\,\\Omega$\n・電圧計の1次換算抵抗：$500 \\times 100^2 = 5\\text{ M}\\Omega$",
+          note: "1次換算は巻数比の2乗を掛ける（$Z_1 = a^2 Z_2$）。"
+        },
+        {
+          id: "k_26",
+          category: "第3章：OPアンプ・電子計器",
+          q: "「理想 OP アンプ」の2つの重要な性質（入力インピーダンスと差動電圧利得、仮想短絡）を説明せよ。",
+          a: "① 入力インピーダンスが無限大（$I_+ = I_- = 0$：入力端子に電流が流れない）。\n② 差動電圧利得 $\\alpha$ が無限大（$V_d = \\frac{V_o}{\\alpha} = 0$：反転入力と非反転入力の電位が等しくなる＝仮想短絡 / イマジナリショート）。",
+          note: "実際のOPアンプでも $\\alpha$ が非常に大きい（$10^5$ 程度）ため $V_d \\approx 0$ とみなせる。"
+        },
+        {
+          id: "k_27",
+          category: "第3章：OPアンプ・電子計器",
+          q: "【課題6(3)(4)(5)】\nOPアンプを用いた「非反転増幅回路」「反転増幅回路」「差動増幅回路」の電圧増幅率（出力電圧 $V_o$）の式を書け。",
+          a: "・非反転増幅回路：$A_V = \\frac{R_1 + R_2}{R_1}$（正相）\n・反転増幅回路：$A_V = -\\frac{R_2}{R_1}$（逆相：位相が反転）\n・差動増幅回路：$V_o = \\frac{R_2}{R_1}(V_2 - V_1)$（2つの入力の引き算・同相ノイズ除去）",
+          note: "課題6(4)：差動利得 $A_d$ が有限の反転増幅回路は $V_o = -A_d v$、$v = V_o / A_d$（$V_o=5\\text{V},\\; A_d=10^5 \\Rightarrow v=50\\,\\mu\\text{V}$）。"
+        },
+        {
+          id: "k_28",
+          category: "第3章：OPアンプ・電子計器",
+          q: "OPアンプを用いた交流電圧検出回路における「直流増幅形」と「交流増幅形」の違いを説明せよ。",
+          a: "・直流増幅形：交流電圧を整流した後に直流増幅器で増幅する（高周波用）。\n・交流増幅形：交流電圧を増幅した後に整流して直流電圧で取り出す（高感度の測定が可能だが、広帯域の交流増幅回路が必要）。",
+          note: "直流増幅形の波高値指示プローブでは結合コンデンサにより直流分をカットし、交流分のみ測定できる。"
+        },
+        {
+          id: "k_29",
+          category: "第3章：OPアンプ・電子計器",
+          q: "交流・直流変換プローブの4方式（①波高値形 ②ピークピーク値形 ③平均値形 ④実効値形）の整流回路と特徴を答えよ。",
+          a: "① 波高値形：半波整流回路（波高値を取り出す）。\n② ピークピーク値形：倍電圧整流回路（波高値の2倍。パルス波形の測定に最適、$50\\sim 10^8\\text{ Hz}$）。\n③ 平均値形：全波整流回路（微小電圧の測定に適する）。\n④ 実効値形：熱電対の2乗特性を利用（過電圧・過電流に弱い。電流計 $10\\text{ MHz}$・電圧計 $100\\text{ kHz}$ まで）。",
+          note: "正弦波ならピークピーク値形では入力最大電圧の2倍の直流電圧が得られる。"
+        },
+        {
+          id: "k_30",
+          category: "第3章：OPアンプ・電子計器",
+          q: "ディジタルマルチメータ（DMM）がアナログ計器（サーキットテスタ）に比べて優れている点を3つ以上挙げよ。",
+          a: "① 読み取り誤差がない\n② 4〜7桁の高い精度の測定が可能\n③ ディジタル出力なのでデータ伝送や演算が容易\n④ マイクロプロセッサによりデシベル表示などのデータ処理が容易\n⑤ 高速測定・反復測定が容易",
+          note: "DMMは各種物理量（交流電圧・抵抗・電流など）を直流電圧に変換した後にDVM（ディジタルボルトメータ）で測定する。"
+        },
+        {
+          id: "k_31",
+          category: "第3章：OPアンプ・電子計器",
+          q: "「デシベル（dB）表示」の定義式を、電圧利得 $G_v$・電流利得 $G_i$・電力利得 $G_o$ についてそれぞれ書け。",
+          a: "・電圧利得：$G_v = 20\\log_{10}\\left(\\frac{v_1}{v_2}\\right)\\text{ [dB]}$\n・電流利得：$G_i = 20\\log_{10}\\left(\\frac{i_1}{i_2}\\right)\\text{ [dB]}$\n・電力利得：$G_o = 10\\log_{10}\\left(\\frac{P_1}{P_2}\\right)\\text{ [dB]}$",
+          note: "電力は電圧・電流の2乗に比例するため、係数が $20$ ではなく $10$ になる！"
+        },
+        {
+          id: "k_32",
+          category: "第3章：OPアンプ・電子計器",
+          q: "「ミラー積分器」の出力電圧 $E_o$ の式と、「二重積分形デジタル電圧計（DVM）」の測定電圧 $E_1$ の式を書け。",
+          a: "・ミラー積分器：$E_o = -\\frac{1}{CR}\\int E_i\\, dt$\n・二重積分形DVM：$E_1 = E_2 \\left(\\frac{T_2}{T_1}\\right)$\n（入力 $E_1$ を一定時間 $T_1$ 積分し、逆極性の基準電圧 $E_2$ で出力が $0$ になるまでの時間 $T_2$ をクロックパルスで計測する）",
+          note: "二重積分形は $C$ や $R$、クロック周波数の誤差が相殺されるため高精度でノイズに強い。"
+        }
+      ],
+
+      gazo: [
+        // --- 第1〜3回：基礎・濃度変換 ---
+        {
+          id: "g_01",
+          category: "第1〜3回：基礎・濃度変換",
+          q: "【2023過去問1】\n「サンプリング定理」とは何か説明せよ。また、周期が $2t$ より短い場合に生じる現象を何というか。",
+          a: "① 信号に含まれる最大周波数が $f_{\\max}$ であるとき、情報を正しく取り込むためには $2f_{\\max}$ 以上の周波数でサンプリングする必要がある。\n② サンプリング周期が $t$ であるとき、$2t$ 以下の周期をもつ（速い）振動は正確に取り込むことができない。\n・生じる現象：折り返しひずみ（エイリアシング）",
+          note: "元信号にはない低い周波数の信号が現れるのがエイリアシング。"
+        },
+        {
+          id: "g_02",
+          category: "第1〜3回：基礎・濃度変換",
+          q: "【2023過去問2】\nカラー画像からグレースケール（モノクロ）画像を作成する方法を2通り（NTSC方式の輝度信号 $Y$ の式と簡易法）説明せよ。",
+          a: "・NTSC方式：輝度信号 $Y$ を用いる。\n$$Y = 0.299R + 0.587G + 0.114B$$\n・簡易法：RGBの3値の平均 $(R+G+B)/3$ を濃度値とする。\n・ディスプレイ表示：RGBすべてに同じ値（$Y$）を設定する。",
+          note: "色差信号は $I = 0.596R - 0.274G - 0.322B$、$Q = 0.211R - 0.522G + 0.311B$。"
+        },
+        {
+          id: "g_03",
+          category: "第1〜3回：基礎・濃度変換",
+          q: "【2025過去問1】\nグレースケール画像に対する「線形ヒストグラム強調」の目的と変換式を説明せよ（濃度範囲 $a \\sim b$、最大濃度 $z_m=255$）。",
+          a: "・目的：濃度値がある範囲（$a \\sim b$）に集中している場合に、ダイナミックレンジ（表現幅）を有効に使えるよう、濃度分布の範囲を $0 \\sim z_m$ に広げて画質を改善する。\n・変換式：\n$$z' = \\begin{cases} 0 & (0 \\le z \\le a) \\\\ z_m \\frac{z-a}{b-a} & (a \\le z \\le b) \\\\ z_m(=255) & (b \\le z \\le z_m) \\end{cases}$$",
+          note: "2025年配点20点！グラフ（折れ線）と目的・式をセットで覚える。"
+        },
+        {
+          id: "g_04",
+          category: "第1〜3回：基礎・濃度変換",
+          q: "【2025過去問2】\nグレースケール画像に対する「ヒストグラム平坦化」とはどのような処理か。手順と特徴を説明せよ。",
+          a: "・概要：ヒストグラムの度数（画素数）が平坦になるよう、濃度値を強制的に変換して各度数を平均画素数にそろえる処理。\n・手順：まずヒストグラムを調べ、各濃度レベルがどのレベルへ移動すれば平坦化できるか考える。\n・特徴：濃度変換式は用いない。ヒストグラムに隙間が生じず濃度値が有効利用できるが、アルゴリズムはやや複雑になる。",
+          note: "線形ヒストグラム強調は隙間ができるが、平坦化は隙間ができず各レベルが平均画素数に揃う。"
+        },
+
+        // --- 第4回：空間フィルタ・微分・エッジ ---
+        {
+          id: "g_05",
+          category: "第4回：空間フィルタ・微分",
+          q: "【2025過去問5】\n「平均値フィルタ」のオペレータ、効果（有効なノイズ）、および短所を2つ答えよ。",
+          a: "・オペレータ：$a[k,l] = \\frac{1}{9}\\begin{bmatrix} 1 & 1 & 1 \\\\ 1 & 1 & 1 \\\\ 1 & 1 & 1 \\end{bmatrix}$（中心点と近傍8点の濃度値を単純平均する）。\n・効果：ごま塩雑音（不規則な雑音で高い周波成分を含む場合）の除去に有効。\n・短所：① 画像に「ぼやけ」が生じる　② 最外郭の処理ができない（画像の上下左右が1列ずつ小さくなる）。",
+          note: "式：$g[i,j] = \\frac{1}{9}(f[i-1,j-1]+\\cdots+f[i,j]+\\cdots+f[i+1,j+1])$。"
+        },
+        {
+          id: "g_06",
+          category: "第4回：空間フィルタ・微分",
+          q: "【2023過去問4】\n「メジアンフィルタ」とはどのような処理か。長所・短所を2つずつ答えよ。",
+          a: "・処理：$3\\times 3$ 領域の9つの濃度値の中央値（大きさ順に並べた5番目）を調べ、その値を注目画素の新しい濃度値とする。\n・長所：①「ぼけ」が生じにくい　② ごま塩ノイズに非常に強い。\n・短所：① 中央値を求める（ソート）のが面倒　② 最外郭の処理ができない。",
+          note: "平均値フィルタと違い、極端な外れ値（ごま塩ノイズ）に引っ張られずエッジを保てる。"
+        },
+        {
+          id: "g_07",
+          category: "第4回：空間フィルタ・微分",
+          q: "【2024過去問1】\n1次微分の「前進差分」「後進差分」「中心差分」の $x$ 方向差分式と、それぞれどの地点の微分値を表すか答えよ。",
+          a: "・前進差分：$\\Delta_x f = f[i+1,j] - f[i,j]$（$i + 1/2$ の地点）\n・後進差分：$\\Delta_x f = f[i,j] - f[i-1,j]$（$i - 1/2$ の地点）\n・中心差分：$\\Delta_x f = \\frac{f[i+1,j]-f[i-1,j]}{2} \\rightarrow f[i+1,j]-f[i-1,j]$（割り算を省く、$i$ の地点）",
+          note: "y方向も同様に $j$ を $+1, -1$ する。中心差分は位置のズレがない。"
+        },
+        {
+          id: "g_08",
+          category: "第4回：空間フィルタ・微分",
+          q: "【2023過去問3】\n「Prewitt（プレヴィット）フィルタ」の横方向・縦方向オペレータと、勾配の大きさ $g[i,j]$・方向 $\\theta[i,j]$ の式を書け。",
+          a: "・横方向（左右の濃度差）：$\\begin{bmatrix} -1 & 0 & 1 \\\\ -1 & 0 & 1 \\\\ -1 & 0 & 1 \\end{bmatrix}$\n・縦方向（上下の濃度差）：$\\begin{bmatrix} -1 & -1 & -1 \\\\ 0 & 0 & 0 \\\\ 1 & 1 & 1 \\end{bmatrix}$\n・勾配の大きさ：$g[i,j] = \\sqrt{(\\Delta_x f)^2 + (\\Delta_y f)^2}$（または $|\\Delta_x f|+|\\Delta_y f|$、$\\max(|\\Delta_x f|,|\\Delta_y f|)$）\n・勾配の方向：$\\theta[i,j] = \\tan^{-1}\\left(\\frac{\\Delta_y f}{\\Delta_x f}\\right)$",
+          note: "中心差分を上下（または左右）3行分足し合わせてノイズに強くしたものがPrewittフィルタ。"
+        },
+        {
+          id: "g_09",
+          category: "第4回：空間フィルタ・微分",
+          q: "距離の定義4つ（ユークリッド・マンハッタン・チェビシェフ・ミンコフスキー）の式と特徴を答えよ。",
+          a: "① ユークリッド距離：$\\sqrt{(\\Delta_x f)^2 + (\\Delta_y f)^2}$（最短の直線距離）\n② マンハッタン距離（L1）：$|\\Delta_x f| + |\\Delta_y f|$（格子状の道のり）\n③ チェビシェフ距離：$\\max(|\\Delta_x f|, |\\Delta_y f|)$（大きい方を選択）\n④ ミンコフスキー距離：$(|\\Delta_x f|^p + |\\Delta_y f|^p)^{1/p}$（$p=1$ でマンハッタン、$p=2$ でユークリッド、$p=\\infty$ でチェビシェフ）",
+          note: "エッジ検出の勾配の大きさ計算でどれを使うかに対応している。"
+        },
+        {
+          id: "g_10",
+          category: "第4回：空間フィルタ・微分",
+          q: "2次微分（ラプラシアン $\\nabla^2 f$）の4方向・8方向オペレータと、エッジの位置・描画時の注意点を答えよ。",
+          a: "・4方向ラプラシアン：$\\begin{bmatrix} 0 & 1 & 0 \\\\ 1 & -4 & 1 \\\\ 0 & 1 & 0 \\end{bmatrix}$\n・8方向ラプラシアン：$\\begin{bmatrix} 1 & 1 & 1 \\\\ 1 & -8 & 1 \\\\ 1 & 1 & 1 \\end{bmatrix}$\n・エッジ位置：2次微分の**ゼロクロス点**の位置がエッジと解釈できる。\n・描画時：負の値も取りうるため、中間濃度値（127 or 128）をプラス（底上げ）して描画する。",
+          note: "定義：$\\nabla^2 f = \\frac{\\partial^2 f}{\\partial x^2} + \\frac{\\partial^2 f}{\\partial y^2}$。"
+        },
+        {
+          id: "g_11",
+          category: "第4回：空間フィルタ・微分",
+          q: "【2024過去問2】\n4方向鮮鋭化オペレータ $\\begin{bmatrix} 0 & -1 & 0 \\\\ -1 & 5 & -1 \\\\ 0 & -1 & 0 \\end{bmatrix}$ の成り立ちと画像への効果を説明せよ。",
+          a: "・成り立ち：原画像からラプラシアンを差し引いたもの（$g[i,j] = f[i,j] - \\nabla^2 f$）。\n・効果：ラプラシアンフィルタで物体の輪郭（濃度差が生じている部分）を抽出しつつ原画像を重ねることで、画像中の輪郭が強調され、不鮮明なぼやけた画像を修正・鮮明化（鮮鋭化）できる。",
+          note: "8方向鮮鋭化は中心が $9$、周囲8つが $-1$ のオペレータ。"
+        },
+
+        // --- 第5回：二値化・画像解析 ---
+        {
+          id: "g_12",
+          category: "第5回：二値化・画像解析",
+          q: "【2025過去問3】\n2値画像における「ラスタースキャン」とはどのようなことをするか説明せよ。",
+          a: "画像を左上から右方向へ1段ずつ走査して、対象物（黒画素など）を見つけること。",
+          note: "ランレングス表現、境界線追跡、ラベリングの最初の手順として使われる。"
+        },
+        {
+          id: "g_13",
+          category: "第5回：二値化・画像解析",
+          q: "【2025過去問4】\n2値化の閾値を自動決定する「Pタイル法」「モード法」「微分ヒストグラム法」をそれぞれ説明せよ。",
+          a: "・Pタイル法：対象物の面積比 $p = S_0/S = N_0/N$ が判明しているとき、累積ヒストグラムがその割合になる濃度値を閾値とする。\n・モード法：対象と背景の濃度差が大きくヒストグラムに2つの山が現れるとき、その中間の谷（極小）を閾値とする。\n・微分ヒストグラム法：画像全体の各場所で微分値の絶対値（勾配）を求め、原画像の濃度値別に集計して和が最大になった濃度値を閾値とする。",
+          note: "微分ヒストグラム法は、モード法で山が1つしかなく谷が決まらない場合にも有効。"
+        },
+        {
+          id: "g_14",
+          category: "第5回：二値化・画像解析",
+          q: "「大津の二値化（判別分析法）」はどのような基準で最適な閾値 $t$ を決定するか。",
+          a: "背景と前景の2クラスに分けたとき、分離度 $= \\frac{\\text{クラス間分散 } \\sigma_b^2}{\\text{クラス内分散 } \\sigma_w^2}$ が最大になる閾値 $t$ を求める。\n全体の分散 $\\sigma_t^2 = \\sigma_w^2 + \\sigma_b^2$ は一定のため、**クラス間分散 $\\sigma_b^2 = \\frac{w_1 w_2 (m_1 - m_2)^2}{(w_1 + w_2)^2}$ を最大にする $t$** を選べばよい。",
+          note: "計算上、分子の $w_1 w_2 (m_1 - m_2)^2$ を最大にする $t$ が閾値となる。"
+        },
+        {
+          id: "g_15",
+          category: "第5回：二値化・画像解析",
+          q: "2値画像の表現法である「ランレングス表現」と「チェインコード表現」の特徴を説明せよ。",
+          a: "・ランレングス表現：白または黒が連続する性質を利用し、（値, 連続数）の組で符号化して情報圧縮する。\n・チェインコード表現：境界を任意の始点から次の点の方向（8方向量子化符号など）で符号化する。画像サイズが大きくなっても1画素あたり**3ビット**（通常は $2\\log_2 n$ ビット）で表現できる。",
+          note: "チェインコードの最初の2つのデータは始点の $(x, y)$ 座標を表す。"
+        },
+        {
+          id: "g_16",
+          category: "第5回：二値化・画像解析",
+          q: "2値画像の「膨張」「収縮」の定義と、「クロージング」「オープニング」の処理順・効果を答えよ。",
+          a: "（黒：対象物、白：背景の場合）\n・膨張：周辺に1画素でも黒があれば黒に置換 → 小さな穴や溝が埋まる。\n・収縮：周辺に1画素でも白があれば白に置換 → 孤立点・突起・細い線が消える。\n・クロージング：**膨張 → 収縮**（穴・溝を埋めて大きさを戻す）。\n・オープニング：**収縮 → 膨張**（孤立点・ノイズを消して大きさを戻す）。",
+          note: "順番を逆に覚えないように注意！「開く（オープン）＝余計な突起を削ってから戻す（収縮→膨張）」。"
+        },
+        {
+          id: "g_17",
+          category: "第5回：二値化・画像解析",
+          q: "「境界線追跡」において、外側境界と内側境界の始点条件、および追跡がエラーになる2つの条件を答えよ。",
+          a: "・外側境界の始点：注目画素が黒、**左側**が白。\n・内側境界の始点：注目画素が黒、**右側**が白。\n・エラーになる条件：\n  ① 孤立点があるとき\n  ② 幅が1画素しかない線（特に斜めの線）があるとき",
+          note: "ラベリングでは「黒画素が画面端にあるとエラーになる」点も注意！"
+        },
+        {
+          id: "g_18",
+          category: "第5回：二値化・画像解析",
+          q: "【2025過去問6】\n2値画像の特徴点抽出において、連結数 $N$（周囲8画素で黒(1)→白(0)へ変化する回数）が $N=1, 2, 3, 4$ の画素をそれぞれ何というか。",
+          a: "・$N=1$：**端点**（線の端）\n・$N=2$：**連結点**（線上の点）\n・$N=3$：**分岐点**（T字路など）\n・$N=4$：**交差点**（十字路など）",
+          note: "2025年問6では「端点（N=1）」と「交差点（N=4）」が出題！"
+        },
+        {
+          id: "g_19",
+          category: "第5回：二値化・画像解析",
+          q: "「円形度 $F$」の定義式と、周囲長 $L$・面積 $S$ の求め方、および値が示す意味を答えよ。",
+          a: "・定義式：$$F = \\frac{4\\pi S}{L^2}$$\n・求め方：面積 $S$ は輪郭内側の対象画素数、周囲長 $L$ は上下左右を距離 $1$・斜めを距離 $\\sqrt{2}$ として輪郭を足し合わせる。\n・意味：完全な円に近いと $1$ に近づき、扁平すると $0$ に近づく。",
+          note: "半径 $r$ の円なら $S=\\pi r^2, L=2\\pi r$ を代入して $F=1$ になるよう係数 $4\\pi$ が決まる。"
+        },
+
+        // --- 第6回：ハフ変換・幾何変換 ---
+        {
+          id: "g_20",
+          category: "第6回：ハフ変換・幾何変換",
+          q: "「ハフ変換」とはどのような処理か。変換式と、直線が検出される仕組み（投票・開票）を説明せよ。",
+          a: "・概要：二値化画像から直線（または方程式で記述できる図形）を検出する手法。\n・変換式：$$\\rho = x\\cos\\theta + y\\sin\\theta \\quad (0 \\le \\theta \\le \\pi)$$\n・仕組み：対象物の各画素 $(x, y)$ について $\\rho$-$\\theta$ 平面に曲線を描画（**投票**）すると、同一直線上の点は $\\rho$-$\\theta$ 平面の1点で交わり得票数が最大になる。その点を検出（**開票**）して直線を決定する。",
+          note: "画像の中央に原点を置く。垂線が $y<0$ 領域にある場合は $\\rho < 0$ となる。"
+        },
+        {
+          id: "g_21",
+          category: "第6回：ハフ変換・幾何変換",
+          q: "【2024過去問3】\n画像を拡大表示するときに必要な処理（マッピングと補間）と、補間法3種（最近傍法・線形補間法・双三次補間）の特徴を答えよ。",
+          a: "・必要な処理：元画像から処理画像への対応付け（**マッピング**）を行うと、拡大では対応する画素が元画像上に無い場所が生じるため、新しい情報で埋め合わせる（**補間**）必要がある。拡大画像側から元画像へデータを拾い出しに行くと効率が良い。\n・補間法：\n  ① 最近傍法：最も近い画素を用いる。簡便だがエッジにギザギザが目立つ。\n  ② 線形補間法：近傍4画素の距離に応じた重み付き平均をとる。\n  ③ 双三次補間：16近傍を用い、sinc関数を3次多項式近似した関数で補間（高性能・市販ソフトで多用）。",
+          note: "2次元線形補間：$z' = (1-q)\\{(1-p)f[i,j]+pf[i+1,j]\\} + q\\{(1-p)f[i,j+1]+pf[i+1,j+1]\\}$。"
+        },
+        {
+          id: "g_22",
+          category: "第6回：ハフ変換・幾何変換",
+          q: "【2023過去問5】\n画像を縮小する際に必要な処理と、縮小前に「平均値フィルタ（ぼかし）」を施す理由を答えよ。",
+          a: "・必要な処理：複数個の画素を1つにまとめる処理（代表画素を選ぶか平均値を割り当てる）。\n・平均値フィルタを施す理由：縮小時にはサンプリング定理に基づく**エイリアシング**（折り返しひずみ・不自然な縞模様）が生じやすいため、事前にぼかして高周波成分を抑える。",
+          note: "x方向に $s_x$ 倍、y方向に $s_y$ 倍する同次座標行列：$\\begin{pmatrix} s_x & 0 & 0 \\\\ 0 & s_y & 0 \\\\ 0 & 0 & 1 \\end{pmatrix}$。"
+        },
+        {
+          id: "g_23",
+          category: "第6回：ハフ変換・幾何変換",
+          q: "【2024過去問4】\n同次座標を使ったアフィン変換行列のうち、「平行移動 $(a, b)$」「原点中心の反時計回り回転 $\\theta$」「シャーリング」の $3\\times 3$ 行列を書け。",
+          a: "・平行移動：$\\begin{pmatrix} 1 & 0 & a \\\\ 0 & 1 & b \\\\ 0 & 0 & 1 \\end{pmatrix}$\n・回転（$\\theta$）：$\\begin{pmatrix} \\cos\\theta & -\\sin\\theta & 0 \\\\ \\sin\\theta & \\cos\\theta & 0 \\\\ 0 & 0 & 1 \\end{pmatrix}$\n・シャーリング：$\\begin{pmatrix} 1 & s_x & 0 \\\\ s_y & 1 & 0 \\\\ 0 & 0 & 1 \\end{pmatrix}$",
+          note: "3成分 $(x, y, 1)^T$ で定義する座標を「同次座標」と呼ぶ。"
+        },
+        {
+          id: "g_24",
+          category: "第6回：ハフ変換・幾何変換",
+          q: "【2024過去問5】\n「台形補正（射影変換 / 透視変換 / ホモグラフィ変換）」とはどのような処理か。アフィン変換との違いも答えよ。",
+          a: "・概要：4組の対応点 $(x_1,y_1)\\sim(x_4,y_4) \\to (u_1,v_1)\\sim(u_4,v_4)$ から9個の条件を用いて定数 $a\\sim h$ と $w=gx+hy+1$ を求め、斜めから撮った台形画像を長方形等に補正する変換。\n$$\\begin{pmatrix} u \\\\ v \\\\ 1 \\end{pmatrix} = \\frac{1}{w}\\begin{pmatrix} a & b & e \\\\ c & d & f \\\\ g & h & 1 \\end{pmatrix}\\begin{pmatrix} x \\\\ y \\\\ 1 \\end{pmatrix}$$\n・違い：アフィン変換では平行線が平行線に変換されるが、**射影変換では平行線の平行が保証されない**。",
+          note: "投影＝立体を平面図に描くとき（製図等）、変換＝数学やコンピュータで扱う場合。"
+        },
+        {
+          id: "g_25",
+          category: "第6回：ハフ変換・幾何変換",
+          q: "【2023過去問6】\n「テンプレートマッチング」とはどのような処理か。また、一致度を測る2つの指標（差 $R$ と相互相関係数 $C$）を答えよ。",
+          a: "・概要：あらかじめ用意したテンプレートを対象画像上で移動させながら重ね合わせ、一致する位置（文字認識や特定部分の探索）を調べる方法。\n・2値化画像の差：$R = \\sum_{i=1}^M \\sum_{j=1}^N |I(i,j) - T(i,j)|$（**$R$ が小さいほど**一致）。\n・相互相関係数 $C$：平均を引いた積和を正規化した値（**$C$ が最大となる位置**を調べる。厳密だが計算に時間がかかる）。",
+          note: "相互相関係数 $C = \\frac{\\sum\\sum \\phi(i,j)\\varphi(i,j)}{\\sqrt{\\sum\\sum \\phi(i,j)^2 \\sum\\sum \\varphi(i,j)^2}}$。"
+        }
+      ],
+
+      denshi: [
+        // --- 2025年度：電力増幅回路・動作領域 ---
+        {
+          id: "d_01",
+          category: "電力増幅：動作領域・基礎",
+          q: "【2025過去問 1-①,②,③】\nトランジスタの「動作領域」を構成する3つの定格と、その中に設定する点を何というか。また大電力増幅回路（$0.01\\text{ W}$ 以上）の解析法を答えよ。",
+          a: "・動作領域の3要素：① 最大コレクタ電流 $I_{C\\max}$　② 最大コレクタ電圧 $V_{CE\\max}$　③ 最大コレクタ損失 $P_{C\\max}$\n・設定する点：**動作点**（負荷線上に設定）\n・解析法：大振幅出力で非線形部分まで使うため $h$ パラメータ等価回路解析はできず、**静特性図による図式解析**を用いる。",
+          note: "動作領域外で動作させると、逆バイアスで出力0になったり、過電流・過損失でトランジスタが焼損（破損）する。"
+        },
+        {
+          id: "d_02",
+          category: "電力増幅：動作領域・基礎",
+          q: "【2025過去問 1-④】\n電力増幅回路の4つの分類（A級・B級・C級・D級）の流通角 $\\theta_f$ と特徴を答えよ。",
+          a: "・**A級**：流通角 $\\theta_f = 2\\pi$（全周期で増幅。ひずみ小、効率低）\n・**B級**：流通角 $\\theta_f = \\pi$（半周期のみ増幅。プッシュプルで使う）\n・**C級**：流通角 $0 \\le \\theta_f \\le \\pi$（半周期未満のみ増幅。高効率・同調増幅）\n・**D級**：**デジタル方式**（スイッチング動作による高効率増幅）",
+          note: "2025問1-④では正弦波の入力に対して出力波形がどう増幅されるかの図示と流通角 $\\theta_f$ が問われた。"
+        },
+        {
+          id: "d_03",
+          category: "電力増幅：動作領域・基礎",
+          q: "【2025過去問 3】\n「抵抗負荷 A級電力増幅回路」と「変圧器結合 A級電力増幅回路」の動作点 $(V_{CE}, I_C)$ と最大電力効率 $\\eta_P$（振幅率 $k=1$）を答えよ。",
+          a: "・**抵抗負荷 A級**：\n  動作点 $\\left(\\frac{V_{CC}}{2},\\; \\frac{V_{CC}}{2R_C}\\right)$、$P_{DC} = \\frac{V_{CC}^2}{2R_C}$、$P_o = \\frac{V_{CC}^2}{8R_C}$\n  $\\Rightarrow \\eta_P = \\frac{P_o}{P_{DC}} = 0.25\\text{ (25\\%)}$\n・**変圧器結合 A級**（$R_L' = n^2 R_L$）：\n  動作点 $\\left(V_{CC},\\; \\frac{V_{CC}}{R_L'}\\right)$、$P_{DC} = \\frac{V_{CC}^2}{R_L'}$、$P_o = \\frac{V_{CC}^2}{2R_L'}$\n  $\\Rightarrow \\eta_P = \\frac{P_o}{P_{DC}} = 0.50\\text{ (50\\%)}$",
+          note: "抵抗負荷は直流電流による電力消費があるため25%止まりだが、変圧器結合は50%まで上がる。"
+        },
+        {
+          id: "d_04",
+          category: "電力増幅：B級プッシュプル",
+          q: "【2025過去問 1-⑤,⑥】\nB級プッシュプル回路で電圧増幅率が約 $1$ になる理由（電流増幅が主）、およびトランスなしの主流回路名（SEPP / OCL）とトランスを使わない理由を答えよ。",
+          a: "・電圧増幅率が約 $1$ の理由：片側がONになるとき必ず**エミッタフォロワ（コレクタ接地）**になるため、負帰還が働き出力電圧が入力とほぼ一致する。\n・トランスなしの主流：**SEPP** 回路（オーディオ等では出力コンデンサもない **OCL** 回路）。\n・トランスを使わない理由：トランスは金属の塊で**大きく重い**ため（また周波数特性も悪くなるため）。",
+          note: "2025問2では、クロスオーバーひずみ対策なしOCL回路と、ダイオード等で閾値電圧バイアスを与えた対策あり回路の図示が出題。"
+        },
+        {
+          id: "d_05",
+          category: "電源回路・整流回路",
+          q: "【2025過去問 1-⑦】\nAC→DC変換・DC→AC変換を行う装置をそれぞれ何というか。また、太陽電池用パワコンにはどちらが内蔵されているか（理由も）。",
+          a: "・AC → DC：**コンバータ**\n・DC → AC：**インバータ**\n・パワコンに内蔵：**インバータ**（太陽電池が発電する電気は **DC（直流）** であり、家電や電力系統は **AC（交流）** であるため）。",
+          note: "コンバータ＝順変換、インバータ＝逆変換。"
+        },
+        {
+          id: "d_06",
+          category: "電源回路・整流回路",
+          q: "【2025過去問 1-⑧,⑨】\n一般的な電源の構成4つ、平滑回路の3種類、「電圧変動率 $K_V$」の意味、および負荷抵抗 $R_L$ が小さくなったときのリプル率 $\\gamma$ の変化を答えよ。",
+          a: "・電源の構成：**変圧回路**・整流回路・平滑回路・安定化回路\n・平滑回路の3種：**コンデンサ入力型**・**チョーク入力型**・**LC組み合わせ型**\n・電圧変動率 $K_V$：負荷の大きさに関わらず一定の電圧を加え続けられる能力を表す指標（理想は $K_V = 0$）。\n・$R_L$ が小さくなると：リプル率 $\\gamma = \\frac{1}{2\\sqrt{3} f C R_L}$ より、負荷電流が大きくなってコンデンサの放電が早くなり電圧が下がるため、**リプル率は大きくなる**。",
+          note: "2025問1-⑧の「変圧回路」や、1-⑨の「電流増加→電圧降下が早まる→リプル率増大」の因果関係がポイント！"
+        },
+        {
+          id: "d_07",
+          category: "電源回路・整流回路",
+          q: "【2025過去問 4-③】\n半波整流回路（$i(t) = I_m\\sin\\omega t$）の直流平均電流 $I_{DC}$、実効値 $I_{ef}$、およびリプル率が約 $1.21$ になる導出を示せ。",
+          a: "・時間平均：$I_{DC} = \\frac{1}{T}\\int_0^T i(t)\\,dt = \\frac{1}{2\\pi}\\int_0^\\pi I_m\\sin\\omega t\\,d(\\omega t) = \\frac{I_m}{\\pi}$\n・実効値：$I_{ef} = \\sqrt{\\frac{1}{2\\pi}\\int_0^\\pi I_m^2\\sin^2\\omega t\\,d(\\omega t)} = \\frac{I_m}{2}$\n・リプル率：\n$$\\frac{i_{ef}}{I_{DC}} = \\frac{\\sqrt{I_{ef}^2 - I_{DC}^2}}{I_{DC}} = \\sqrt{\\left(\\frac{I_{ef}}{I_{DC}}\\right)^2 - 1} = \\sqrt{\\frac{\\pi^2}{4} - 1} \\approx 1.21$$",
+          note: "振幅実効値 $i_{ef} = \\sqrt{I_{ef}^2 - I_{DC}^2}$ の導出もよく出る！"
+        },
+        {
+          id: "d_08",
+          category: "電源回路・整流回路",
+          q: "【2025過去問 4-④】\n半波整流回路と全波整流回路の交流入力電力 $P_{AC}$ を比較せよ（順方向抵抗 $r_d$、負荷抵抗 $R_L$、最大電圧 $V_m$）。",
+          a: "・半波整流：$P_{AC} = \\frac{V_m^2}{4(r_d + R_L)}$\n・全波整流：$P_{AC} = \\frac{V_m}{\\sqrt{2}} \\cdot \\frac{I_m}{\\sqrt{2}} = \\frac{V_m^2}{2(r_d + R_L)}$\n・比較：全波整流回路の交流入力電力は半波整流回路の **2倍** 大きい。",
+          note: "2025問4-④では「比較は？」と赤字で注意書きあり。必ず「全波は半波の2倍大きい」と明記すること！"
+        },
+
+        // --- 2023・2024年度：発振回路・フーリエ・パルス ---
+        {
+          id: "d_09",
+          category: "発振・パルス・フーリエ(過去問)",
+          q: "【2024過去問 1】\nウィーンブリッジ型RC発振回路の発振周波数 $f$ の式と、OPアンプの非反転増幅回路の電圧利得条件を答えよ。",
+          a: "・発振周波数：$$f = \\frac{1}{2\\pi\\sqrt{R_1 R_2 C_1 C_2}}$$\n（$R_1=R_2=R,\\; C_1=C_2=C$ のとき $f = \\frac{1}{2\\pi RC}$）\n・利得条件：帰還率 $\\beta = \\frac{1}{3}$ となるため、非反転増幅回路の利得 $A_v = 1 + \\frac{R_3}{R_4} \\ge 3$（つまり $R_3 \\ge 2R_4$）が必要。",
+          note: "周波数 $f$ において位相シフトが $0^\\circ$（正帰還）になる。"
+        },
+        {
+          id: "d_10",
+          category: "発振・パルス・フーリエ(過去問)",
+          q: "【2023過去問 1 / 2024過去問 2】\n水晶の化学式と電気的性質（圧電効果・電歪効果）、および水晶発振回路の周波数変動が極めて小さい理由を答えよ。",
+          a: "・化学式：$\\text{SiO}_2$（二酸化ケイ素）\n・**圧電効果**：結晶に応力を加えて変形させると表面に電荷を生じる現象。\n・**電歪効果**：結晶に電圧を加えると振動しわずかに変形する現象。\n・安定な理由：固有振動数が結晶の形状と材質によって決まり、温度による変化が少ないため。",
+          note: "応用例：水晶時計（一定周波数の信号を分周して1Hzの信号を作る）。"
+        },
+        {
+          id: "d_11",
+          category: "発振・パルス・フーリエ(過去問)",
+          q: "【2023過去問 2 / 2024過去問 5】\nパルス波形の用語4つ（①パルス幅 $t_w$ ②立上り時間 $t_r$ ③立下り時間 $t_f$ ④くり返し周波数 $f$）の定義を答えよ。",
+          a: "① パルス幅 $t_w$：振幅の立上り $50\\%$ から立下り $50\\%$ までの時間。\n② 立上り時間 $t_r$：振幅が $10\\%$ から $90\\%$ になるまでの時間。\n③ 立下り時間 $t_f$：振幅が $90\\%$ から $10\\%$ になるまでの時間。\n④ くり返し周波数 $f$：周期 $T$ の逆数（$f = 1/T$）。",
+          note: "2023年答案で「立下り時間：90%→10%」「パルス幅：50%→50%」の定義が強調されている。"
+        },
+        {
+          id: "d_12",
+          category: "発振・パルス・フーリエ(過去問)",
+          q: "【2023過去問 3 / 2024過去問 3】\n振幅 $A$ の方形波（奇関数）をフーリエ級数展開した式と、基本波・高調波の意味を答えよ。",
+          a: "・展開式（$a_0=0, a_n=0$）：\n$$f(t) = \\frac{4A}{\\pi}\\left(\\sin\\omega t + \\frac{1}{3}\\sin 3\\omega t + \\frac{1}{5}\\sin 5\\omega t + \\cdots\\right)$$\n・**基本波**：くり返し周波数と同じ周波数（$\\omega$）をもつ正弦波。\n・**高調波**：基本波の周波数の整数倍（$3\\omega, 5\\omega, \\cdots$）の周波数をもつ正弦波。",
+          note: "方形波は奇数次の高調波のみを含み、振幅は $1/n$ に比例して減衰する。"
+        },
+        {
+          id: "d_13",
+          category: "発振・パルス・フーリエ(過去問)",
+          q: "【2023過去問 4 / 2024過去問 4】\n無安定マルチバイブレータにおいて、$Tr_1$ OFF・$Tr_2$ ON のときの $V_{CE1}, V_{CE2}$ と、出力パルスの時間 $T_1$ が何で決まるか答えよ。",
+          a: "・$Tr_1$ OFF（$I_{C1}=0$）：$V_{CE1} = V_{CC} - R_{C1}I_{C1} = V_{CC}$\n・$Tr_2$ ON（$I_{C2}$ 最大）：$V_{CE2} = V_{CE(\\text{sat})}$（飽和電圧 $\\approx 0$）\n・時間 $T_1$：コンデンサの充放電による過渡現象であり、時定数 $R_{B1} C_{B1}$ によって決まる（$T_1 \\propto R_{B1} C_{B1}$）。",
+          note: "なお、単位は $[\\text{F}]\\cdot[\\Omega] = \\left[\\frac{\\text{C}}{\\text{V}}\\right]\\cdot\\left[\\frac{\\text{V}}{\\text{A}}\\right] = \\left[\\frac{\\text{A}\\cdot\\text{s}}{\\text{A}}\\right] = [\\text{s}]$。"
+        }
+      ],
+
+      pawaele: [
+        // 1. pn接合の降伏現象
+        {
+          id: "pw-1",
+          unit: "pn接合・降伏現象",
+          q: "pn接合における「降伏現象」とはどのような現象か？",
+          a: "逆方向電圧を増加させ、ある電圧（降伏電圧 $V_B$）に達すると、急激に大きな逆方向電流が流れ出す現象。",
+          note: "代表的なメカニズムとして「電子なだれ降伏」と「ツェナー降伏」がある。"
+        },
+        {
+          id: "pw-2",
+          unit: "pn接合・降伏現象",
+          q: "「電子なだれ降伏（アバランシェ降伏）」のメカニズムを説明せよ。",
+          a: "逆バイアスにより空乏層の電界が強まり、少数キャリア（自由電子）がクーロン力で加速して結晶原子（Si）に衝突・電離し、新たな電子とホールが発生する。この衝突が繰り返されてキャリアがねずみ算式に増加し、大きな逆方向電流が流れる。",
+          note: "2022・2023・2025年頻出。キーワード：電界の増大・クーロン力で加速・結晶原子と衝突電離・キャリアのねずみ算的増加。"
+        },
+        {
+          id: "pw-3",
+          unit: "pn接合・降伏現象",
+          q: "「ツェナー降伏」のメカニズムを説明せよ（不純物濃度とトンネル効果に言及すること）。",
+          a: "不純物濃度が高いため空乏層の幅が薄い。逆バイアスをかけるとトンネル効果により、p側の電子が電子波となってn側の伝導帯へ移動し、小さな逆方向電圧で大きな逆方向電流が流れる。",
+          note: "2022年問1(b)。電子なだれ降伏（空乏層が広い・高電圧）との対比で覚える。"
+        },
+
+        // 2. ツェナーダイオード（ZD）定電圧回路
+        {
+          id: "pw-4",
+          unit: "ツェナーダイオード定電圧回路",
+          q: "電源 $E$・直列抵抗 $R_S$・ツェナーダイオード（電流 $I_Z$）・負荷抵抗 $R$（電流 $I_R$、出力電圧 $V$）からなる定電圧回路の2つの基本式は？",
+          a: "① 電流則：$I = I_Z + I_R$\n② 電圧則：$V = E - R_S I$",
+          note: "V-I特性は、$V$ がツェナー電圧（立ち上がり電圧）$V_Z$ に近づくと $I_Z$ が急激に増加する特性を持つ。"
+        },
+        {
+          id: "pw-5",
+          unit: "ツェナーダイオード定電圧回路",
+          q: "定電圧回路において、電源電圧 $E$ が一定で負荷抵抗 $R$ が増加したとき、出力電圧 $V$ がほぼ一定に保たれる理由を説明せよ。",
+          a: "$R$ 増加 → 負荷電流 $I_R$ が減少 → $I = I_Z + I_R$ より全電流 $I$ が減少 → $V = E - R_S I$ より $R_S I$ が減少し $V$ が上昇しようとする → V-I特性より $I_Z$ が急激に増加。\n$I_Z$ の増加が $I_R$ の減少を相殺するため $I$ の変化が抑えられ、$V$ の変化が抑制される。",
+          note: "逆に $R$ が減少したときは $I_R$ 増加 → $I$ 増加 → $V$ 低下 → $I_Z$ が急減して $I_R$ の増加を相殺し $V$ が一定に保たれる。"
+        },
+        {
+          id: "pw-6",
+          unit: "ツェナーダイオード定電圧回路",
+          q: "定電圧回路において、負荷抵抗 $R$ が一定で電源電圧 $E$ が減少したとき、出力電圧 $V$ がほぼ一定に保たれる理由を説明せよ。",
+          a: "$E$ 減少 → 電流 $I$ が減少 → V-I特性より $V$ 減少に伴い $I_Z$ が急減 → $I = I_Z + I_R$ より $I$ が減少 → $V = E - R_S I$ より電圧降下 $R_S I$ が減少。\n$E$ の減少と $R_S I$ の減少が相殺するため、$V$ はほぼ一定になる。",
+          note: "逆に $E$ が上昇したときは $I_Z$ が急増 → $I$ 増加 → $R_S I$ 増加となり、$E$ の増加と相殺する。"
+        },
+        {
+          id: "pw-7",
+          unit: "ツェナーダイオード定電圧回路",
+          q: "A/D変換においてツェナーダイオードによる定電圧回路が使われる理由は何か？",
+          a: "A/D変換の量子化には一定の基準電圧が必要であり、その安定な基準電圧源として定電圧回路が用いられるため。",
+          note: "2022年問2(c)出題。"
+        },
+
+        // 3. ショットキーバリアダイオード（SBD）
+        {
+          id: "pw-8",
+          unit: "ショットキーバリアダイオード",
+          q: "ショットキーバリアダイオード（金属とn型半導体の接合）のバンド図における記号 $q\\phi_m$、$q\\phi_s$、$q\\chi_s$ の名称と意味は？",
+          a: "・$q\\phi_m$：金属の仕事関数（金属表面から電子1個を真空中に取り出すのに必要な最低エネルギー）\n・$q\\phi_s$：半導体の仕事関数\n・$q\\chi_s$：n型半導体の電子親和力",
+          note: "2022・2023・2025年出題。SBDでは $q\\phi_m > q\\phi_s$ の関係になる。"
+        },
+        {
+          id: "pw-9",
+          unit: "ショットキーバリアダイオード",
+          q: "SBDに順方向バイアス（金属側＋、n型半導体側－）をかけたとき、大きな順方向電流が流れる理由をバンド図から説明せよ。",
+          a: "n型半導体のフェルミ準位（バンド）が $qV$ だけ上昇し、n型半導体から見た金属への障壁高さが低くなるため、大量の自由電子が金属側へ拡散する。\n一方、金属から見たn型半導体への障壁高さは変わらないため金属からの拡散はわずかで、大きな順方向電流が流れる。",
+          note: "2022・2023・2025年出題。キーワード：「n型半導体のバンドが $qV$ 上昇」「n型→金属の障壁が低下」「金属→n型の障壁は不変」。"
+        },
+        {
+          id: "pw-10",
+          unit: "ショットキーバリアダイオード",
+          q: "SBDに逆方向バイアス（金属側－、n型半導体側＋）をかけたとき、ほとんど電流が流れない理由をバンド図から説明せよ。",
+          a: "n型半導体のフェルミ準位（バンド）が $qV$ だけ下降し、n型半導体から見た金属への障壁高さが高くなるため、自由電子が金属側へ拡散できなくなる。\nまた、金属から見たn型半導体への障壁高さは変わらないためわずかな電子しか拡散せず、小さな逆方向電流しか流れない。",
+          note: "2025年問3(c)出題。"
+        },
+        {
+          id: "pw-11",
+          unit: "ショットキーバリアダイオード",
+          q: "ショットキーバリアダイオード（SBD）の利点と欠点をそれぞれ挙げよ。",
+          a: "・利点：多数キャリア（電子またはホール）のみで動作するため少数キャリアの蓄積時間（蓄積効果）がなく、高速スイッチングが可能。\n・欠点：逆耐電圧が低いため壊れやすい。",
+          note: "2022年問3(c)出題。順方向電圧降下 $V_F$ が小さいことも特徴。"
+        },
+
+        // 4. サイリスタ（SCR）と位相制御
+        {
+          id: "pw-12",
+          unit: "サイリスタと位相制御",
+          q: "サイリスタ（p-n-p-nの4層構造、接合 $J_1, J_2, J_3$）において、ゲート電流 $I_G=0$ で印加電圧が $0 < V < V_{BO}$ のとき OFF 状態である理由は？",
+          a: "pn接合 $J_1$ と $J_3$ は順方向バイアスだが、中央の $J_2$（$n_B$-$p_B$ 間）が逆方向バイアスとなるため、少数キャリアによるわずかな漏れ電流しか流れず OFF となる。",
+          note: "2022・2023・2025年頻出。"
+        },
+        {
+          id: "pw-13",
+          unit: "サイリスタと位相制御",
+          q: "サイリスタで $I_G=0$ のまま印加電圧を上げて $V = V_{BO}$（ブレークオーバー電圧）に達すると、OFF → ON に遷移するメカニズムは？",
+          a: "$J_2$ の電界が大きくなり電子なだれが発生 → $n_B$ に大量の自由電子、$p_B$ に大量のホールが流れ込む → それぞれ $n_B$ 内のドナーイオン・$p_B$ 内のアクセプタイオンと中和し、$J_2$ の空乏層が消滅 → $J_1, J_2, J_3$ すべてが導通し大電流が流れる（ON）。",
+          note: "2023・2025年出題。空乏層消滅がポイント。"
+        },
+        {
+          id: "pw-14",
+          unit: "サイリスタと位相制御",
+          q: "サイリスタをオンにするためにゲートへ入力するパルス状の電流を何と呼ぶか？また、位相制御で直流ではなく交流電源を用いる理由は？",
+          a: "・パルス状のゲート電流の名称：トリガーパルス\n・交流電源を用いる理由：サイリスタは電流（または印加電圧 $V$）が $0$ になることで OFF（ターンオフ）になる。直流電源では $V=0$ にならず一度 ON すると OFF できないため、時間的に極性が反転し $V=0$ が存在する交流電源を用いる。",
+          note: "2022・2023・2025年頻出。"
+        },
+        {
+          id: "pw-15",
+          unit: "サイリスタと位相制御",
+          q: "サイリスタによる位相制御において、「点弧角」を変えると負荷抵抗 $R$ の消費電力が増減する理由を説明せよ。",
+          a: "点弧角（トリガーパルスを入力するタイミング・位相角）を変えると、サイリスタが導通する時間が変わり、負荷に流れる平均電流 $i$ が変化する。\n負荷の消費電力は $P = R i^2$ であるため、電流 $i$（実効電流）が変わることで消費電力が増減する。",
+          note: "負の半サイクル（$v < 0$）ではゲート電流 $i_G$ を入れても電流は流れない点にも注意。"
+        },
+
+        // 5. バリキャップ（可変容量ダイオード）
+        {
+          id: "pw-16",
+          unit: "バリキャップ",
+          q: "バリキャップ（可変容量ダイオード）が電圧によって静電容量を変化させられる原理を説明せよ。",
+          a: "pn接合に逆バイアスを印加すると空乏層の電界が強まり、空乏層幅 $W$ が拡大する。\np・n領域を電極、空乏層を誘電体とみなすと静電容量は $C = \\frac{\\varepsilon_r \\varepsilon_0 S}{W}$ となるため、印加電圧を上げるほど $W$ が拡大し、静電容量 $C$ が減少する。",
+          note: "2023年問5出題。同調回路（チューナー）などで利用される。"
+        }
+      ]
+    };
+
+    // =========================================================================
+    // 状態管理
+    // =========================================================================
+    const STORAGE_KEY = "kosen4_midterm_anki_v1";
+    let state = {
+      subject: "keisoku",
+      mode: "card",
+      category: "ALL",
+      reviewOnly: false,
+      shuffled: false,
+      redSheetOn: true,
+      currentIndex: 0,
+      isBack: false,
+      progress: {}
+    };
+
+    let currentList = [];
+
+    function loadState() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        if (saved && saved.progress) state.progress = saved.progress;
+        if (saved && saved.theme === "light") document.body.classList.add("light");
+      } catch (e) {}
+      updateThemeBtn();
+    }
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        progress: state.progress,
+        theme: document.body.classList.contains("light") ? "light" : "dark"
+      }));
+    }
+
+    // =========================================================================
+    // テキスト整形・安全なKaTeXレンダリング
+    // =========================================================================
+    function formatTextToHtml(str) {
+      // HTML特殊文字をエスケープしてから改行を<br>に変換（$...$ の中の < > も壊れないようにする）
+      const escaped = str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+      return escaped.replace(/\n/g, "<br>");
+    }
+
+    function safeRenderMath(el) {
+      if (!el) return;
+      if (typeof window.renderMathInElement === "function") {
+        window.renderMathInElement(el, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "$", right: "$", display: false }
+          ],
+          throwOnError: false,
+          strict: false
+        });
+      }
+    }
+
+    // =========================================================================
+    // リスト構築
+    // =========================================================================
+    function getSubjectQuestions() {
+      return QUESTIONS[state.subject] || [];
+    }
+
+    function rebuildList(doShuffle = false) {
+      let list = getSubjectQuestions().filter(q => {
+        if (state.category !== "ALL" && q.category !== state.category) return false;
+        if (state.reviewOnly && state.progress[q.id] === "mastered") return false;
+        return true;
+      });
+      if (doShuffle || state.shuffled) {
+        for (let i = list.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [list[i], list[j]] = [list[j], list[i]];
+        }
+      }
+      currentList = list;
+      if (state.currentIndex >= currentList.length) {
+        state.currentIndex = Math.max(0, currentList.length - 1);
+      }
+      state.isBack = false;
+    }
+
+    // =========================================================================
+    // UI レンダリング
+    // =========================================================================
+    function renderTabs() {
+      const container = document.getElementById("subjectTabs");
+      container.innerHTML = "";
+      SUBJECTS.forEach(sub => {
+        const btn = document.createElement("button");
+        btn.className = "subject-tab" + (sub.id === state.subject ? " active" : "") + (!sub.ready ? " disabled" : "");
+        const count = (QUESTIONS[sub.id] || []).length;
+        btn.innerHTML = `${sub.name} <span class="badge">${sub.ready ? count : "予定"}</span>`;
+        btn.onclick = () => {
+          if (!sub.ready) return;
+          state.subject = sub.id;
+          state.category = "ALL";
+          state.currentIndex = 0;
+          populateCategories();
+          rebuildList();
+          renderAll();
+        };
+        container.appendChild(btn);
+      });
+    }
+
+    function populateCategories() {
+      const sel = document.getElementById("categoryFilter");
+      const cats = Array.from(new Set(getSubjectQuestions().map(q => q.category)));
+      sel.innerHTML = `<option value="ALL">全単元 (${getSubjectQuestions().length})</option>`;
+      cats.forEach(c => {
+        const cnt = getSubjectQuestions().filter(q => q.category === c).length;
+        const opt = document.createElement("option");
+        opt.value = c;
+        opt.textContent = `${c} (${cnt})`;
+        sel.appendChild(opt);
+      });
+      sel.value = state.category;
+    }
+
+    function renderProgress() {
+      const all = getSubjectQuestions();
+      const mastered = all.filter(q => state.progress[q.id] === "mastered").length;
+      const review = all.filter(q => state.progress[q.id] === "review").length;
+      const pct = all.length ? Math.round((mastered / all.length) * 100) : 0;
+
+      document.getElementById("progressText").textContent = `${mastered} / ${all.length} (${pct}%)`;
+      document.getElementById("reviewCountText").textContent = `要復習: ${review}問`;
+      document.getElementById("progressFill").style.width = `${pct}%`;
+    }
+
+    function renderCardMode(animateFlip = false) {
+      const cardView = document.getElementById("cardModeView");
+      const empty = document.getElementById("emptyState");
+
+      if (currentList.length === 0) {
+        cardView.classList.add("hidden");
+        empty.classList.remove("hidden");
+        return;
+      }
+      cardView.classList.remove("hidden");
+      empty.classList.add("hidden");
+
+      const q = currentList[state.currentIndex];
+      const st = state.progress[q.id] || "unseen";
+      const card = document.getElementById("flashcard");
+
+      card.classList.toggle("is-back", state.isBack);
+      if (animateFlip) {
+        card.classList.remove("flip-anim");
+        void card.offsetWidth;
+        card.classList.add("flip-anim");
+      }
+
+      document.getElementById("cardCategory").textContent = q.category;
+      document.getElementById("cardCounter").textContent = `${state.currentIndex + 1} / ${currentList.length}`;
+
+      const dot = document.getElementById("cardStatusDot");
+      dot.className = "status-dot dot-" + st;
+
+      const labelEl = document.getElementById("cardSideLabel");
+      const mainEl = document.getElementById("cardMainText");
+      const noteEl = document.getElementById("cardNote");
+      const hintEl = document.getElementById("tapHint");
+
+      if (!state.isBack) {
+        labelEl.textContent = "QUESTION（問題）";
+        mainEl.innerHTML = formatTextToHtml(q.q);
+        noteEl.classList.add("hidden");
+        hintEl.textContent = "👆 カードをタップして解答を見る";
+      } else {
+        labelEl.textContent = "ANSWER（解答）";
+        mainEl.innerHTML = formatTextToHtml(q.a);
+        if (q.note) {
+          noteEl.innerHTML = "💡 <strong>ポイント:</strong><br>" + formatTextToHtml(q.note);
+          noteEl.classList.remove("hidden");
+        } else {
+          noteEl.classList.add("hidden");
+        }
+        hintEl.textContent = "👆 タップで問題に戻る";
+      }
+
+      safeRenderMath(card);
+    }
+
+    function renderListMode() {
+      const listView = document.getElementById("listModeView");
+      const empty = document.getElementById("emptyState");
+      const grid = document.getElementById("listGrid");
+
+      if (currentList.length === 0) {
+        listView.classList.add("hidden");
+        empty.classList.remove("hidden");
+        return;
+      }
+      listView.classList.remove("hidden");
+      empty.classList.add("hidden");
+
+      document.getElementById("listCountInfo").textContent = `${currentList.length}問 表示中`;
+      const toggleBtn = document.getElementById("redSheetToggle");
+      toggleBtn.textContent = state.redSheetOn ? "📕 赤シート: ON" : "📖 赤シート: OFF";
+      toggleBtn.classList.toggle("off", !state.redSheetOn);
+
+      grid.innerHTML = "";
+      currentList.forEach((q, idx) => {
+        const st = state.progress[q.id] || "unseen";
+        const item = document.createElement("div");
+        item.className = "list-item";
+
+        const noteHtml = q.note
+          ? `<div style="margin-top:8px; padding-top:8px; border-top:1px dashed var(--border); font-size:0.84rem; color:var(--text-muted);">💡 ${formatTextToHtml(q.note)}</div>`
+          : "";
+
+        item.innerHTML = `
+          <div class="list-item-head">
+            <span class="cat-tag">${q.category}</span>
+            <span style="color: var(--text-muted);">#${idx + 1}</span>
+          </div>
+          <div class="list-q">${formatTextToHtml(q.q)}</div>
+          <div class="list-a ${state.redSheetOn ? "masked" : ""}">
+            <div class="mask-target">
+              <div style="font-weight:700;">${formatTextToHtml(q.a)}</div>
+              ${noteHtml}
+            </div>
+          </div>
+          <div class="list-item-foot">
+            <button class="mini-btn ${st === "review" ? "active-review" : ""}" data-act="review">🔁 もう一回</button>
+            <button class="mini-btn ${st === "mastered" ? "active-mastered" : ""}" data-act="mastered">✅ 覚えた</button>
+          </div>
+        `;
+
+        const ansBox = item.querySelector(".list-a");
+        ansBox.onclick = () => ansBox.classList.toggle("masked");
+
+        item.querySelector('[data-act="review"]').onclick = () => {
+          state.progress[q.id] = "review";
+          saveState();
+          renderProgress();
+          renderListMode();
+        };
+        item.querySelector('[data-act="mastered"]').onclick = () => {
+          state.progress[q.id] = "mastered";
+          saveState();
+          if (state.reviewOnly) rebuildList();
+          renderProgress();
+          renderListMode();
+        };
+
+        grid.appendChild(item);
+      });
+
+      safeRenderMath(grid);
+    }
+
+    function renderAll() {
+      renderTabs();
+      renderProgress();
+      if (state.mode === "card") {
+        document.getElementById("cardModeView").classList.remove("hidden");
+        document.getElementById("listModeView").classList.add("hidden");
+        renderCardMode();
+      } else {
+        document.getElementById("cardModeView").classList.add("hidden");
+        document.getElementById("listModeView").classList.remove("hidden");
+        renderListMode();
+      }
+    }
+
+    function updateThemeBtn() {
+      document.getElementById("themeToggle").textContent = document.body.classList.contains("light") ? "🌙" : "☀️";
+    }
+
+    // =========================================================================
+    // カード操作（タップ反転・スワイプ判定）
+    // =========================================================================
+    const flashcardEl = document.getElementById("flashcard");
+    const badgeMastered = document.getElementById("badgeMastered");
+    const badgeReview = document.getElementById("badgeReview");
+
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchDeltaX = 0;
+    let isSwiping = false;
+
+    flashcardEl.addEventListener("touchstart", (e) => {
+      if (e.touches.length !== 1) return;
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+      touchDeltaX = 0;
+      isSwiping = false;
+      flashcardEl.style.transition = "none";
+    }, { passive: true });
+
+    flashcardEl.addEventListener("touchmove", (e) => {
+      if (e.touches.length !== 1) return;
+      const dx = e.touches[0].clientX - touchStartX;
+      const dy = e.touches[0].clientY - touchStartY;
+      if (!isSwiping && Math.abs(dx) > 15 && Math.abs(dx) > Math.abs(dy) * 1.2) {
+        isSwiping = true;
+      }
+      if (isSwiping) {
+        touchDeltaX = dx;
+        const rot = dx * 0.04;
+        flashcardEl.style.transform = `translateX(${dx}px) rotate(${rot}deg)`;
+        badgeMastered.style.opacity = dx > 30 ? Math.min(1, (dx - 30) / 70) : 0;
+        badgeReview.style.opacity = dx < -30 ? Math.min(1, (-dx - 30) / 70) : 0;
+      }
+    }, { passive: true });
+
+    flashcardEl.addEventListener("touchend", () => {
+      flashcardEl.style.transition = "transform 0.2s ease";
+      flashcardEl.style.transform = "";
+      badgeMastered.style.opacity = 0;
+      badgeReview.style.opacity = 0;
+
+      if (isSwiping) {
+        if (touchDeltaX > 90) {
+          markCurrent("mastered");
+        } else if (touchDeltaX < -90) {
+          markCurrent("review");
+        }
+        setTimeout(() => { isSwiping = false; }, 50);
+      }
+    });
+
+    flashcardEl.addEventListener("click", (e) => {
+      if (isSwiping) return;
+      // 数式スクロール操作などの誤反応を除き、タップで裏返し
+      state.isBack = !state.isBack;
+      renderCardMode(true);
+    });
+
+    function markCurrent(status) {
+      if (currentList.length === 0) return;
+      const q = currentList[state.currentIndex];
+      state.progress[q.id] = status;
+      saveState();
+      if (state.reviewOnly && status === "mastered") {
+        rebuildList();
+      } else {
+        state.currentIndex = (state.currentIndex + 1) % currentList.length;
+        state.isBack = false;
+      }
+      renderProgress();
+      renderCardMode(true);
+    }
+
+    // =========================================================================
+    // イベントリスナー
+    // =========================================================================
+    document.querySelectorAll(".mode-btn").forEach(btn => {
+      btn.onclick = () => {
+        document.querySelectorAll(".mode-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        state.mode = btn.dataset.mode;
+        renderAll();
+      };
+    });
+
+    document.getElementById("categoryFilter").onchange = (e) => {
+      state.category = e.target.value;
+      state.currentIndex = 0;
+      rebuildList();
+      renderAll();
+    };
+
+    document.getElementById("reviewOnlyBtn").onclick = (e) => {
+      state.reviewOnly = !state.reviewOnly;
+      e.target.classList.toggle("active", state.reviewOnly);
+      state.currentIndex = 0;
+      rebuildList();
+      renderAll();
+    };
+
+    document.getElementById("shuffleBtn").onclick = (e) => {
+      state.shuffled = !state.shuffled;
+      e.target.classList.toggle("active", state.shuffled);
+      state.currentIndex = 0;
+      rebuildList(state.shuffled);
+      renderAll();
+    };
+
+    document.getElementById("prevCardBtn").onclick = () => {
+      if (currentList.length === 0) return;
+      state.currentIndex = (state.currentIndex - 1 + currentList.length) % currentList.length;
+      state.isBack = false;
+      renderCardMode(true);
+    };
+
+    document.getElementById("nextCardBtn").onclick = () => {
+      if (currentList.length === 0) return;
+      state.currentIndex = (state.currentIndex + 1) % currentList.length;
+      state.isBack = false;
+      renderCardMode(true);
+    };
+
+    document.getElementById("markMasteredBtn").onclick = () => markCurrent("mastered");
+    document.getElementById("markReviewBtn").onclick = () => markCurrent("review");
+
+    document.getElementById("redSheetToggle").onclick = () => {
+      state.redSheetOn = !state.redSheetOn;
+      renderListMode();
+    };
+
+    document.getElementById("themeToggle").onclick = () => {
+      document.body.classList.toggle("light");
+      updateThemeBtn();
+      saveState();
+    };
+
+    document.getElementById("resetProgressBtn").onclick = () => {
+      if (!confirm("現在の教科の習得状況をすべてリセットしますか？")) return;
+      getSubjectQuestions().forEach(q => delete state.progress[q.id]);
+      saveState();
+      state.currentIndex = 0;
+      rebuildList();
+      renderAll();
+    };
+
+    document.addEventListener("keydown", (e) => {
+      if (state.mode !== "card" || currentList.length === 0) return;
+      if (e.target.tagName === "SELECT" || e.target.tagName === "INPUT") return;
+      if (e.code === "Space") {
+        e.preventDefault();
+        state.isBack = !state.isBack;
+        renderCardMode(true);
+      } else if (e.key === "1") {
+        markCurrent("mastered");
+      } else if (e.key === "2") {
+        markCurrent("review");
+      } else if (e.key === "ArrowRight") {
+        document.getElementById("nextCardBtn").click();
+      } else if (e.key === "ArrowLeft") {
+        document.getElementById("prevCardBtn").click();
+      }
+    });
+
+    // 初期化（KaTeXロード完了後にも確実に再描画）
+    window.addEventListener("DOMContentLoaded", () => {
+      loadState();
+      populateCategories();
+      rebuildList();
+      renderAll();
+    });
+
+    window.addEventListener("load", () => {
+      renderAll();
+    });
+  </script>
+</body>
+</html>
