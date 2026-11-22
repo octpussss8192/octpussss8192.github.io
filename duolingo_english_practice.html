@@ -36,6 +36,39 @@
       margin: 0;
       padding: 0;
     }
+    input, textarea {
+      user-select: text;
+      -webkit-user-select: text;
+    }
+    .write-screen {
+      display: none;
+      flex-direction: column;
+      gap: 14px;
+      padding: 18px 20px 30px;
+      flex: 1;
+    }
+    .write-input {
+      width: 100%;
+      min-height: 96px;
+      padding: 14px;
+      font-size: 16px;
+      font-family: var(--font-main);
+      border: 2px solid #e5e5e5;
+      border-radius: 14px;
+      resize: vertical;
+      outline: none;
+      line-height: 1.5;
+    }
+    .write-input:focus { border-color: var(--secondary); }
+    .write-feedback {
+      padding: 14px;
+      border-radius: 14px;
+      font-size: 14px;
+      line-height: 1.55;
+      display: none;
+    }
+    .write-feedback.ok { background: var(--primary-light); color: #2b6300; border: 2px solid var(--primary); }
+    .write-feedback.ng { background: var(--danger-light); color: #a81515; border: 2px solid var(--danger); }
 
     body {
       font-family: var(--font-main);
@@ -821,10 +854,11 @@
     </div>
   </header>
 
-  <!-- タブナビゲーション（整序クイズ / 単語帳） -->
+  <!-- タブナビゲーション（整序クイズ / 書き取りテスト / 単語帳） -->
   <div class="nav-tabs">
-    <button class="nav-tab active" id="tabQuiz">🎯 整序・英作文 (大問6・7)</button>
-    <button class="nav-tab" id="tabVocab">📖 TOEIC重要単語 (大問2)</button>
+    <button class="nav-tab active" id="tabQuiz">🎯 整序 (大問6)</button>
+    <button class="nav-tab" id="tabWrite">✍️ 書き取り (大問7)</button>
+    <button class="nav-tab" id="tabVocab">📖 単語 (大問2)</button>
   </div>
 
   <!-- クイズ設定バー -->
@@ -909,6 +943,25 @@
       <!-- 単語チップが動的に生成されます -->
     </div>
 
+  </main>
+
+  <!-- 書き取りテスト画面（大問7対策） -->
+  <main class="write-screen" id="writeScreen">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+      <button class="unit-btn active" id="writePickBtn" onclick="startWriteTest('pick', this)">🎯 狙われやすい厳選6問</button>
+      <button class="unit-btn" id="writeAllBtn" onclick="startWriteTest('all', this)">📚 全15問チャレンジ</button>
+    </div>
+    <div id="writeProgress" style="font-weight:800;font-size:14px;color:var(--secondary-dark);"></div>
+    <div id="writeCard" style="background:#f7f9fa;border:2px solid #e5e5e5;border-radius:16px;padding:16px;">
+      <div id="writeTag" style="font-size:12px;font-weight:800;color:var(--gray-text);margin-bottom:6px;"></div>
+      <div id="writeJa" style="font-size:17px;font-weight:800;color:var(--dark-text);line-height:1.5;"></div>
+    </div>
+    <textarea id="writeInput" class="write-input" placeholder="ここに英文を入力してください（大文字・ピリオドは省略可）" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+    <div id="writeFeedback" class="write-feedback"></div>
+    <div style="display:flex;gap:10px;">
+      <button class="check-btn" id="writeCheckBtn" style="flex:1;background:var(--primary);color:#fff;box-shadow:0 4px 0 var(--primary-dark);" onclick="checkWriteAnswer()">チェック</button>
+      <button class="check-btn" id="writeNextBtn" style="flex:1;display:none;background:var(--secondary);color:#fff;box-shadow:0 4px 0 var(--secondary-dark);" onclick="nextWriteQuestion()">次の問題へ →</button>
+    </div>
   </main>
 
   <!-- TOEIC単語帳画面 -->
@@ -1410,22 +1463,45 @@ class DuolingoQuizApp {
 
   bindEvents() {
     // タブ切替
+    const tabWrite = document.getElementById("tabWrite");
+    const writeScreen = document.getElementById("writeScreen");
+
     this.tabQuiz.addEventListener("click", () => {
       this.tabQuiz.classList.add("active");
+      tabWrite.classList.remove("active");
       this.tabVocab.classList.remove("active");
       this.quizPlayArea.style.display = "flex";
       this.quizOptionsBar.style.display = "flex";
       this.footerBar.style.display = "flex";
+      writeScreen.style.display = "none";
       this.vocabScreen.style.display = "none";
+    });
+
+    tabWrite.addEventListener("click", () => {
+      tabWrite.classList.add("active");
+      this.tabQuiz.classList.remove("active");
+      this.tabVocab.classList.remove("active");
+      this.quizPlayArea.style.display = "none";
+      this.quizOptionsBar.style.display = "none";
+      this.footerBar.style.display = "none";
+      this.summaryScreen.style.display = "none";
+      this.vocabScreen.style.display = "none";
+      writeScreen.style.display = "flex";
+      if (!window._writeInited) {
+        window._writeInited = true;
+        startWriteTest("pick", document.getElementById("writePickBtn"));
+      }
     });
 
     this.tabVocab.addEventListener("click", () => {
       this.tabVocab.classList.add("active");
       this.tabQuiz.classList.remove("active");
+      tabWrite.classList.remove("active");
       this.quizPlayArea.style.display = "none";
       this.quizOptionsBar.style.display = "none";
       this.footerBar.style.display = "none";
       this.summaryScreen.style.display = "none";
+      writeScreen.style.display = "none";
       this.vocabScreen.style.display = "flex";
     });
 
@@ -1938,6 +2014,99 @@ class DuolingoQuizApp {
 window.addEventListener("DOMContentLoaded", () => {
   new DuolingoQuizApp();
 });
+// ===== 書き取りテスト（大問7対策） =====
+const WRITE_PICK_IDS = [1, 4, 7, 11, 12, 13];
+let wPool = [], wIdx = 0, wScore = 0, wMode = "pick";
+
+function normalizeEn(s) {
+  return s
+    .toLowerCase()
+    .replace(/[—–\-]+/g, " ")
+    .replace(/[.,!?'"’‘]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function startWriteTest(mode, btn) {
+  wMode = mode;
+  if (btn) {
+    document.getElementById("writePickBtn").classList.remove("active");
+    document.getElementById("writeAllBtn").classList.remove("active");
+    btn.classList.add("active");
+  }
+  const src = mode === "pick"
+    ? QUESTION_DATABASE.filter(q => WRITE_PICK_IDS.includes(q.id))
+    : QUESTION_DATABASE.slice();
+  wPool = src.sort(() => Math.random() - 0.5);
+  wIdx = 0; wScore = 0;
+  renderWriteQuestion();
+}
+
+function renderWriteQuestion() {
+  const prog = document.getElementById("writeProgress");
+  const card = document.getElementById("writeCard");
+  const input = document.getElementById("writeInput");
+  const fb = document.getElementById("writeFeedback");
+  const chkBtn = document.getElementById("writeCheckBtn");
+  const nxtBtn = document.getElementById("writeNextBtn");
+
+  if (wIdx >= wPool.length) {
+    prog.textContent = `完了！ スコア：${wScore} / ${wPool.length}`;
+    card.innerHTML = `<div style="text-align:center;padding:12px 0;font-weight:800;font-size:17px;">🎉 お疲れさまでした！（正解率 ${Math.round((wScore / wPool.length) * 100)}%）</div>`;
+    input.style.display = "none";
+    fb.style.display = "none";
+    chkBtn.style.display = "none";
+    nxtBtn.style.display = "block";
+    nxtBtn.textContent = "もう一度挑戦";
+    nxtBtn.onclick = () => startWriteTest(wMode);
+    return;
+  }
+
+  const q = wPool[wIdx];
+  prog.textContent = `問題 ${wIdx + 1} / ${wPool.length}　｜　正解数：${wScore}`;
+  card.innerHTML = `<div style="font-size:12px;font-weight:800;color:var(--gray-text);margin-bottom:6px;">${q.unit}｜第${q.id}問</div>` +
+                   `<div style="font-size:17px;font-weight:800;color:var(--dark-text);line-height:1.5;">${q.ja}</div>`;
+  input.style.display = "block";
+  input.value = "";
+  input.disabled = false;
+  input.focus();
+  fb.style.display = "none";
+  fb.className = "write-feedback";
+  chkBtn.style.display = "block";
+  nxtBtn.style.display = "none";
+  nxtBtn.textContent = "次の問題へ →";
+  nxtBtn.onclick = nextWriteQuestion;
+}
+
+function checkWriteAnswer() {
+  const q = wPool[wIdx];
+  const input = document.getElementById("writeInput");
+  const fb = document.getElementById("writeFeedback");
+  const chkBtn = document.getElementById("writeCheckBtn");
+  const nxtBtn = document.getElementById("writeNextBtn");
+
+  const userNorm = normalizeEn(input.value);
+  const ansNorm = normalizeEn(q.en);
+  const ok = userNorm.length > 0 && userNorm === ansNorm;
+
+  input.disabled = true;
+  if (ok) {
+    wScore++;
+    fb.className = "write-feedback ok";
+    fb.innerHTML = `<strong>🎉 正解！</strong><br>模範解答：<b>${q.en}</b>`;
+  } else {
+    fb.className = "write-feedback ng";
+    fb.innerHTML = `<strong>❌ 惜しい！</strong><br>正解：<b>${q.en}</b><br><span style="font-size:12px;color:#555;">${q.explanation || q.hint || ""}</span>`;
+  }
+  fb.style.display = "block";
+  chkBtn.style.display = "none";
+  nxtBtn.style.display = "block";
+}
+
+function nextWriteQuestion() {
+  wIdx++;
+  renderWriteQuestion();
+}
 </script>
 
 </body>
